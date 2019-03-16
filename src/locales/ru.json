@@ -1,0 +1,68 @@
+{
+    "menu": {
+        "other": "Другое",
+        "dashboard": "Дешбор",
+        "about": "О тикере",
+        "markets": "Рынки",
+        "setting": "Настройки",
+        "account": "Акаунт",
+        "portfolio": "Портфолио"
+    },
+    "general": {
+        "save": "Сохранить",
+        "update": "Обновить",
+        "delete": "Удалить",
+        "add": "Добавить",
+        "amount": "Сума",
+        "buy": "Покупка",
+        "sell": "Продажа",
+        "operation": "Операция",
+        "comment": "Коментарий",
+        "create": "Создать",
+        "cancel": "Отменить",
+        "display-name": "Имя",
+        "bid": "Предложение",
+        "ask": "Спрос"
+    },
+    "setting": {
+        "menu": {
+            "about": "Про приложение",
+            "rate-app": "Зацени Bitfinex тикер"
+        }
+    },
+    "about": {
+        "title": "Про Bitfinex Ticker",
+        "github": "Репозиторий на GitHub",
+        "roadmap": "Планы на будущее",
+        "website": "Website",
+        "telegram": "Telegram",
+        "email": "Почта"
+    },
+    "market": {
+        "calculate": "Калькулятор",
+        "order-book": "Ордера",
+        "last-trades": "Последние сделки",
+        "price-asset": "Цена ({{asset}})",
+        "amount-asset": "Обьем ({{asset}})"
+    },
+    "order-book": {
+        "spread": "Спред",
+        "grouping": "Групировка",
+        "none": "Нема",
+        "resistance": {
+            "title": "Сопротивление в 10% коридоре"
+        }
+    },
+    "calculator": {
+        "average-price": "Средняя цена"
+    },
+    "notice": {
+        "ripple": "Если ты инвестируешь свои деньги в Ripple, то я надеюсь ты знаешь что делаешь"
+    },
+    "riddle": {
+        "message": ""
+    },
+    "choose-coin": {
+        "title": "Выберите валюту"
+    }
+}
