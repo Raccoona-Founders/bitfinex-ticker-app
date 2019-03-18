@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { Fonts, Color } from 'styles/variables';
+import { Color, DefaultStyles } from 'styles/variables';
 
 export default StyleSheet.create({
     field: {
@@ -11,14 +11,12 @@ export default StyleSheet.create({
         top: 8,
     },
     input: {
+        ...DefaultStyles.mediumFont,
         flex: 1,
         fontSize: 18,
         color: Color.Text,
-        fontFamily: Fonts.TTNorms_Medium,
-
         paddingTop: 30,
         paddingBottom: 10,
-
         borderBottomWidth: 1,
         borderBottomColor: Color.Gray3,
     },

@@ -1,7 +1,7 @@
 import React from 'react';
 import numeral from 'numeral';
 import { Line, G, Text } from 'react-native-svg';
-import { Color, Fonts } from 'styles/variables';
+import { Color, DefaultStyles } from 'styles/variables';
 
 type Props = any & {
     price: number;
@@ -29,10 +29,10 @@ export default ({ price, format, side, x, y }: Props) => {
                 dy={textY}
                 alignmentBaseline="middle"
                 textAnchor="end"
-                fontFamily={Fonts.TTNorms_Regular}
+                fontFamily={DefaultStyles.mediumFont.fontFamily}
             >
                 {numeral(price).format(format)}
             </Text>
         </G>
-    )
+    );
 };

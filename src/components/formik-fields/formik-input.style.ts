@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { Fonts, Color } from 'styles/variables';
+import { Fonts, Color, DefaultStyles } from 'styles/variables';
 
 export default StyleSheet.create({
     field: {
@@ -18,13 +18,12 @@ export default StyleSheet.create({
         fontSize: 14,
     },
     input: {
+        ...DefaultStyles.mediumFont,
         flex: 1,
         fontSize: 16,
         color: Color.Text,
-        fontFamily: Fonts.TTNorms_Medium,
         paddingLeft: 10,
         paddingRight: 10,
-
         paddingTop: 30,
         paddingBottom: 10,
     },

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { Color, DefaultStyles, Fonts } from 'styles/variables';
+import { Color, DefaultStyles } from 'styles/variables';
 import Constants from 'utils/constants';
 
 export const mainStyles = StyleSheet.create({
@@ -47,7 +47,6 @@ export const tabBarStyles = StyleSheet.create({
     },
     text: {
         fontSize: 28,
-        fontFamily: Fonts.TTNorms_Regular,
         alignItems: 'center',
         color: Color.Text,
         ...DefaultStyles.boldFont,

@@ -78,7 +78,7 @@ export default class LastTradeCalc extends React.PureComponent<LastTradeCalcProp
         return (
             <View style={styles.resultContainer}>
                 <SpanText style={styles.resultUsdValue}>
-                    <Text style={DefaultStyles.thinFont}>
+                    <Text style={DefaultStyles.mediumFont}>
                         {buyNumber.format(buyAsset.format) || '0'} {buyAsset.key}
                     </Text>
                     <Text> ~ </Text>

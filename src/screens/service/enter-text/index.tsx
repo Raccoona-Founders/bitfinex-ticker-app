@@ -2,16 +2,16 @@ import React from 'react';
 import { TextInput, View, StyleSheet, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import Topic from 'components/topic';
-import { Color, Fonts } from 'styles/variables';
+import { Color, DefaultStyles } from 'styles/variables';
 import { ShadeScrollCard } from 'components/shade-navigator';
 import UIButton from 'components/ui-button';
-
 
 type ScreenState = {
     text: string;
 };
 
-type Props = NavigationScreenProps;
+type Props
+    = NavigationScreenProps;
 
 export default class EnterTextScreen extends React.PureComponent<Props, ScreenState> {
     public state: ScreenState = {
@@ -87,12 +87,12 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     input: {
+        ...DefaultStyles.mediumFont,
         paddingTop: 20,
         paddingBottom: 20,
         paddingLeft: 20,
         paddingRight: 20,
         fontSize: 16,
-        fontFamily: Fonts.TTNorms_Medium,
         color: Color.Text,
         height: '100%',
         maxHeight: '100%',

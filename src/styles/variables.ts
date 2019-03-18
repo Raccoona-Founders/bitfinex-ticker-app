@@ -1,8 +1,8 @@
 import { Platform } from 'react-native';
 
 export enum Color {
-    Main = '#5850FA',
-    Secondary = '#3DC3FA',
+    Main = '#678e2f',
+    Secondary = '#97c554',
 
     Purple = '#312A7D',
     Fade = '#676793',
@@ -34,23 +34,18 @@ export enum Color {
 }
 
 export const Fonts = {
-    TTNorms_Bold: 'TTNormsPro-Bold',
-    TTNorms_Medium: 'TTNormsPro-Medium',
-    TTNorms_Regular: 'TTNormsPro-Regular',
+    PTSans_Bold: 'PtSans-Bold',
+    PTSans_Regular: 'PtSans-Regular',
 };
 
 
 export const DefaultStyles: any = {
-    thinFont: {
-        fontWeight: '400',
-        fontFamily: Fonts.TTNorms_Regular,
-    },
     mediumFont: {
-        fontWeight: '500',
-        fontFamily: Fonts.TTNorms_Medium,
+        fontWeight: '400',
+        fontFamily: Fonts.PTSans_Regular,
     },
     boldFont: {
         fontWeight: '700',
-        fontFamily: Fonts.TTNorms_Bold,
+        fontFamily: Fonts.PTSans_Bold,
     },
 };

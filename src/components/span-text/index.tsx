@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TextProps } from 'react-native';
-import { Color, Fonts } from 'styles/variables';
+import { Color, DefaultStyles } from 'styles/variables';
 
 type RegularTextProps = TextProps & {
     children: string | any;
@@ -18,7 +18,7 @@ export const SpanText = (props: RegularTextProps) => {
 };
 
 const defaultStyle = {
-    fontFamily: Fonts.TTNorms_Medium,
+    ...DefaultStyles.mediumFont,
     color: Color.Text,
 };
 

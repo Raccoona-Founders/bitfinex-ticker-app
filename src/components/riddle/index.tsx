@@ -33,12 +33,12 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     storyText: {
-        ...DefaultStyles.thinFont,
+        ...DefaultStyles.mediumFont,
         marginBottom: 20,
         fontSize: 18,
     },
     questionText: {
-        ...DefaultStyles.mediumFont,
+        ...DefaultStyles.boldFont,
         fontSize: 18,
     },
 });
