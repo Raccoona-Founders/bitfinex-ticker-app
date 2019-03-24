@@ -1,5 +1,5 @@
 import firebase from 'react-native-firebase';
-import { action, observable } from 'mobx';
+import {action, observable} from 'mobx';
 import ModelAsyncStorage from 'mobx-store/common/model-async-storage';
 
 export default class UserModel extends ModelAsyncStorage implements mobx.user.UserModel {
@@ -53,9 +53,12 @@ export default class UserModel extends ModelAsyncStorage implements mobx.user.Us
 
     @action
     private __generateUserId() {
-        const firstChart = UserModel.randomChart();
+        const firstCharts
+            = ['b', UserModel.randomChart(), UserModel.randomChart()]
+            .join('');
+
         const randomNumber = UserModel.randomNumber(100000, 999999);
 
-        this.userId = firstChart + randomNumber.toFixed();
+        this.userId = firstCharts + randomNumber.toFixed();
     }
 }

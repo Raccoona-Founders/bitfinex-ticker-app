@@ -1,17 +1,16 @@
-import { get, forEach, find } from 'lodash';
-import { action, computed, observable, runInAction } from 'mobx';
-import { KunaV3Ticker } from 'kuna-sdk';
+import {get, forEach, find} from 'lodash';
+import {action, computed, observable, runInAction} from 'mobx';
 import Numeral from 'numeral';
 import ModelAsyncStorage from 'mobx-store/common/model-async-storage';
-import { UsdCalculator } from 'utils/currency-rate';
-import kunaClient from 'utils/kuna-api';
+import {UsdCalculator} from 'utils/currency-rate';
+import {BitfinexClient} from 'utils/bitfinex';
 import FavoriteModel from './favorite-model';
 
 const TICKER_UPDATE_TIMEOUT = 10 * 60 * 1000;
 
 export default class TickerModel extends ModelAsyncStorage implements mobx.ticker.TickerModel {
     @observable
-    public tickers: Record<string, KunaV3Ticker> = {};
+    public tickers: Record<string, mobx.ticker.Ticker> = {};
 
     @observable
     public favorite: mobx.ticker.FavoriteModel;
@@ -19,19 +18,16 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
     @observable
     public lastUpdate?: string;
 
-    private __usdRateStore: mobx.usdrate.StoreModel;
-
 
     @action
-    public static create(usdRateStore: mobx.usdrate.StoreModel): TickerModel {
-        return new TickerModel(usdRateStore);
+    public static create(): TickerModel {
+        return new TickerModel();
     }
 
 
-    public constructor(usdRateStore: mobx.usdrate.StoreModel) {
+    public constructor() {
         super();
 
-        this.__usdRateStore = usdRateStore;
         this.favorite = new FavoriteModel();
     }
 
@@ -43,32 +39,68 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
 
     @action
     public fetchTickers = async (): Promise<void> => {
-        const newTickers: Record<string, KunaV3Ticker> = {};
+        const newTickers: Record<string, mobx.ticker.Ticker> = {};
 
         try {
-            const tickers = await kunaClient.getTickers();
-            forEach(tickers, (ticker: KunaV3Ticker) => newTickers[ticker.symbol] = ticker);
-        } catch (e) {
+            const tickers = await BitfinexClient.tickers();
+            forEach(
+                tickers,
+                (ticker) => {
+                    const [
+                        symbol,
+                        bid,
+                        bid_size,
+                        ask,
+                        ask_size,
+                        daily_change,
+                        daily_change_perc,
+                        last_price,
+                        volume,
+                        high,
+                        low
+                    ] = ticker;
 
+                    if (symbol.startsWith('f')) {
+                        return;
+                    }
+
+                    newTickers[symbol] = {
+                        symbol,
+                        bid,
+                        bid_size,
+                        ask,
+                        ask_size,
+                        daily_change,
+                        daily_change_perc,
+                        last_price,
+                        volume,
+                        high,
+                        low,
+                    }
+                }
+            );
+
+            console.log(newTickers);
+        } catch (e) {
         }
 
         runInAction(() => {
-            this.tickers = {
-                ...this.tickers,
-                ...newTickers,
-            };
+            // this.tickers = {
+            //     ...this.tickers,
+            //     ...newTickers,
+            // };
 
             this.lastUpdate = new Date().toISOString();
         });
     };
 
 
-    public getFavorite(): KunaV3Ticker[] {
+    public getFavorite(): mobx.ticker.Ticker[] {
         const list = this.favorite.getList();
 
-        const tickers: KunaV3Ticker[] = [];
+        const tickers: mobx.ticker.Ticker[] = [];
 
-        forEach(this.tickers, (ticker: KunaV3Ticker) => {
+        forEach(this.tickers, (ticker: mobx.ticker.Ticker) => {
             if (list.indexOf(ticker.symbol) >= 0) {
                 tickers.push(ticker);
             }
@@ -78,8 +110,8 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
     }
 
 
-    public getTicker(marketSymbol: string): KunaV3Ticker | undefined {
-        return find(this.tickers, { symbol: marketSymbol });
+    public getTicker(marketSymbol: string): mobx.ticker.Ticker | undefined {
+        return find(this.tickers, {symbol: marketSymbol});
     }
 
 
@@ -87,8 +119,12 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
         let sum = 0;
         const calculator = this.usdCalculator;
 
-        forEach(this.tickers, (ticker: KunaV3Ticker, market: string) => {
-            sum += calculator.getPrice(market).multiply(ticker.volume).value();
+        forEach(this.tickers, (ticker: mobx.ticker.Ticker, market: string) => {
+            try {
+                sum += calculator.getPrice(market).multiply(ticker.volume).value();
+            } catch (error) {
+
+            }
         });
 
         return Numeral(sum);
@@ -97,7 +133,7 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
 
     @computed
     public get usdCalculator(): UsdCalculator {
-        return new UsdCalculator(this.__usdRateStore.rate, this.tickers);
+        return new UsdCalculator(27, {});
     }
 
 
@@ -121,8 +157,8 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
 
     @action
     protected _fromJSON(object: Object) {
-        this.tickers = get(object, 'tickers', {});
-        this.lastUpdate = get(object, 'lastUpdate', undefined);
+        this.tickers = {}; //get(object, 'tickers', {});
+        this.lastUpdate = undefined; //get(object, 'lastUpdate', undefined);
 
         this.favorite.setList(
             get(object, 'favorite', []),

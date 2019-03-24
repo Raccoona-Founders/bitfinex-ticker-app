@@ -1,6 +1,6 @@
-import { KunaAssetUnit, kunaMarketMap, KunaV3Ticker } from 'kuna-sdk';
+import {KunaAssetUnit, kunaMarketMap, KunaV3Ticker} from 'kuna-sdk';
 import Numeral from 'numeral';
-import { find } from 'lodash';
+import {find} from 'lodash';
 
 export class UsdCalculator {
     protected usdRate: number;
@@ -13,14 +13,17 @@ export class UsdCalculator {
 
     public getPrice(marketSymbol: string): Numeral {
         const currentMarket = kunaMarketMap[marketSymbol];
-        const ticker = find(this.tickers, { symbol: marketSymbol }) as KunaV3Ticker || {
+        if (!currentMarket) {
+            return Numeral(0);
+        }
+
+        const ticker = find(this.tickers, {symbol: marketSymbol}) as KunaV3Ticker || {
             last: 0
         };
 
         switch (currentMarket.quoteAsset) {
             case KunaAssetUnit.UkrainianHryvnia:
                 return Numeral(ticker.lastPrice || 0).divide(this.usdRate);
-
 
             case KunaAssetUnit.Bitcoin:
                 const btcTicker = this.tickers['btcuah'];

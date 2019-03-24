@@ -1,46 +1,40 @@
-import { KunaV3Ticker } from 'kuna-sdk';
-import { UsdCalculator } from 'utils/currency-rate';
+import {UsdCalculator} from 'utils/currency-rate';
 
 declare global {
     export namespace mobx {
         type Store
-            = usdrate.WithUsdRateProps
-            & ticker.WithTickerProps
+            = ticker.WithTickerProps
             & user.WithUserProps;
-
-        /**
-         * Mobx model for control USD to UAH rate.
-         */
-        namespace usdrate {
-            interface StoreModel {
-                rate: number;
-                lastUpdate?: string;
-
-                updateUsdRate(): Promise<number>;
-            }
-
-            type WithUsdRateProps = {
-                UsdRate: StoreModel,
-            };
-        }
-
 
         /**
          * This model helps us to track Ticker list
          */
         namespace ticker {
+            type Ticker = {
+                symbol: string;
+                bid: number;
+                bid_size: number;
+                ask: number;
+                ask_size: number;
+                daily_change: number;
+                daily_change_perc: number;
+                last_price: number;
+                volume: number;
+                high: number;
+                low: number;
+            };
+
             interface TickerModel {
-                tickers: Record<string, KunaV3Ticker>;
+                tickers: Record<string, Ticker>;
                 favorite: FavoriteModel;
                 lastUpdate?: string;
-
                 usdCalculator: UsdCalculator;
 
                 fetchTickers(): Promise<void>;
 
-                getFavorite(): KunaV3Ticker[];
+                getFavorite(): Ticker[];
 
-                getTicker(marketSymbol: string): KunaV3Ticker | undefined;
+                getTicker(marketSymbol: string): Ticker | undefined;
 
                 getMarketVolume(): Numeral;
             }
