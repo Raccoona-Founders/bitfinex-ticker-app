@@ -1,6 +1,5 @@
 import React from 'react';
-import { values, chain } from 'lodash';
-import { KunaAssetUnit, KunaMarket, kunaMarketMap } from 'kuna-sdk';
+import { values, chain, keys } from 'lodash';
 import { withNavigation, NavigationInjectedProps } from 'react-navigation';
 import { FlatList, ListRenderItemInfo, StyleSheet } from 'react-native';
 import { inject, observer } from 'mobx-react/native';
@@ -18,7 +17,7 @@ export default class MarketList extends React.Component<Props, State> {
     public render(): JSX.Element {
         return (
             <>
-                <FlatList data={values(kunaMarketMap)}
+                <FlatList data={values(this.props.Ticker.tickers)}
                           renderItem={this.__marketRowRenderer()}
                           initialNumToRender={10}
                           maxToRenderPerBatch={5}
@@ -33,58 +32,46 @@ export default class MarketList extends React.Component<Props, State> {
 
 
     private __marketRowRenderer = () => {
-        const { Ticker, activeAsset, favorite } = this.props;
-        const enabledMarkets = this.__getEnabledMarkets(activeAsset, favorite);
+        const { Ticker, activeAsset } = this.props;
+        const enabledMarkets = this.__getEnabledMarkets(activeAsset);
 
-        return (item: ListRenderItemInfo<KunaMarket>) => {
-            const market = item.item;
-
-            const currentTicker = Ticker.getTicker(market.key);
-            const usdPrice = Ticker.usdCalculator.getPrice(market.key);
+        return (item: ListRenderItemInfo<mobx.ticker.Ticker>) => {
+            const ticker = item.item;
+            const usdPrice = 0; //Ticker.usdCalculator.getPrice(symbol);
 
             return (
-                <MarketRow market={market}
-                           ticker={currentTicker}
+                <MarketRow ticker={ticker}
                            usdPrice={usdPrice}
-                           onPress={this.__pressMarketRow(item.item)}
-                           visible={enabledMarkets.indexOf(market.key) >= 0}
+                           onPress={this.__pressMarketRow(ticker.symbol)}
+                           visible={enabledMarkets.indexOf(ticker.symbol) >= 0}
                 />
             );
         };
     };
 
 
-    private __pressMarketRow = (market: KunaMarket) => {
+    private __pressMarketRow = (market: string) => {
         return () => {
-            this.props.navigation.navigate('Market', { symbol: market.key });
+            // this.props.navigation.navigate('Market', { symbol: market });
         };
     };
 
-    private __getEnabledMarkets = (activeAsset?: KunaAssetUnit, favorite: boolean = false): string[] => {
+    private __getEnabledMarkets = (activeAsset?: string): string[] => {
         if (!activeAsset) {
-            return Object.keys(kunaMarketMap);
+            return Object.keys(this.props.Ticker.tickers);
         }
 
-        /** @TODO Implement favorite */
-        return chain(kunaMarketMap)
-            .filter((market: KunaMarket): boolean => [market.quoteAsset, market.baseAsset].indexOf(activeAsset) >= 0)
-            .map((market: KunaMarket) => market.key)
+        return chain(this.props.Ticker.tickers)
+            .map((market: mobx.ticker.Ticker): string => market.symbol)
             .value();
     };
 }
 
 type OuterProps = {
-    favorite: boolean;
-    activeAsset?: KunaAssetUnit;
+    activeAsset?: string;
 };
-type Props = OuterProps & mobx.ticker.WithTickerProps & NavigationInjectedProps;
 
-const styles = StyleSheet.create({
-    listItemSeparator: {
-        borderBottomColor: Color.GrayLight,
-        borderBottomWidth: 1,
-        marginTop: 0,
-        marginBottom: 0,
-        marginLeft: 20,
-    },
-});
+type Props
+    = OuterProps
+    & mobx.ticker.WithTickerProps
+    & NavigationInjectedProps;

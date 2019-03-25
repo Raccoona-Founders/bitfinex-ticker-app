@@ -5,6 +5,7 @@ import ModelAsyncStorage from 'mobx-store/common/model-async-storage';
 import {UsdCalculator} from 'utils/currency-rate';
 import {BitfinexClient} from 'utils/bitfinex';
 import FavoriteModel from './favorite-model';
+import Helper from './helper';
 
 const TICKER_UPDATE_TIMEOUT = 10 * 60 * 1000;
 
@@ -43,53 +44,19 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
 
         try {
             const tickers = await BitfinexClient.tickers();
-            forEach(
-                tickers,
-                (ticker) => {
-                    const [
-                        symbol,
-                        bid,
-                        bid_size,
-                        ask,
-                        ask_size,
-                        daily_change,
-                        daily_change_perc,
-                        last_price,
-                        volume,
-                        high,
-                        low
-                    ] = ticker;
-
-                    if (symbol.startsWith('f')) {
-                        return;
-                    }
-
-                    newTickers[symbol] = {
-                        symbol,
-                        bid,
-                        bid_size,
-                        ask,
-                        ask_size,
-                        daily_change,
-                        daily_change_perc,
-                        last_price,
-                        volume,
-                        high,
-                        low,
-                    }
-                }
-            );
+            forEach(tickers, (ticker) => {
+                newTickers[ticker[0]] = Helper.mapTicker(ticker);
+            });
 
             console.log(newTickers);
         } catch (e) {
         }
 
         runInAction(() => {
-            // this.tickers = {
-            //     ...this.tickers,
-            //     ...newTickers,
-            // };
-
+            this.tickers = {
+                ...this.tickers,
+                ...newTickers,
+            };
             this.lastUpdate = new Date().toISOString();
         });
     };
@@ -110,8 +77,14 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
     }
 
 
-    public getTicker(marketSymbol: string): mobx.ticker.Ticker | undefined {
-        return find(this.tickers, {symbol: marketSymbol});
+    public getTicker(marketSymbol: string): mobx.ticker.Ticker {
+        const ticker = find(this.tickers, {symbol: marketSymbol});
+
+        if (!ticker) {
+            throw new Error('Fuck!');
+        }
+
+        return ticker;
     }
 
 
@@ -120,10 +93,8 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
         const calculator = this.usdCalculator;
 
         forEach(this.tickers, (ticker: mobx.ticker.Ticker, market: string) => {
-            try {
-                sum += calculator.getPrice(market).multiply(ticker.volume).value();
-            } catch (error) {
-
+            if (ticker.symbol.endsWith('USD') && ticker.type === 'ticker') {
+                sum += ticker.volume;
             }
         });
 

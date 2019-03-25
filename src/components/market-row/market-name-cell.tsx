@@ -1,33 +1,32 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { KunaMarket, getAsset } from 'kuna-sdk';
 import { SpanText } from 'components/span-text';
 import { CoinIcon } from 'components/coin-icon';
 import { Color } from 'styles/variables';
 
 type MarketNameProps = {
-    market: KunaMarket;
+    ticker: mobx.ticker.Ticker;
 };
 
 export const MarketNameCell = (props: MarketNameProps) => {
-    const baseAsset = getAsset(props.market.baseAsset);
+    const { ticker } = props;
 
     return (
         <View style={styles.container}>
             <CoinIcon size={45}
-                      asset={baseAsset}
+                      asset={ticker.symbol.slice(1, 4)}
                       style={{ marginRight: 20 }}
                       withShadow={false}
             />
 
             <View>
                 <View style={styles.marketRow}>
-                    <SpanText style={[styles.pairBoxText, styles.pairBoxBase]}>{props.market.baseAsset}</SpanText>
-                    <SpanText style={[styles.pairBoxText, styles.pairBoxSeparator]}>/</SpanText>
-                    <SpanText style={[styles.pairBoxText, styles.pairBoxQuote]}>{props.market.quoteAsset}</SpanText>
+                    <SpanText style={[styles.pairBoxText, styles.pairBoxBase]}>
+                        {ticker.symbol}
+                    </SpanText>
                 </View>
                 <View style={styles.baseAssetName}>
-                    <SpanText style={styles.baseAssetNameText}>{baseAsset.name}</SpanText>
+                    <SpanText style={styles.baseAssetNameText}>{ticker.symbol}</SpanText>
                 </View>
             </View>
         </View>

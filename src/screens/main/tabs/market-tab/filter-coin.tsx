@@ -1,9 +1,7 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { _ } from 'utils/i18n';
 import { compose } from 'recompose';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
-import { getAsset, KunaAssetUnit } from 'kuna-sdk';
 import SpanText from 'components/span-text';
 import { SelectAssetParams } from 'screens/service/select-asset';
 import { Color } from 'styles/variables';
@@ -12,17 +10,15 @@ import RouteKeys from 'router/route-keys';
 import { CoinIcon } from 'components/coin-icon';
 
 const assets: string[] = [
-    KunaAssetUnit.UkrainianHryvnia,
-    KunaAssetUnit.Bitcoin,
-    KunaAssetUnit.Ethereum,
-    KunaAssetUnit.Tether,
-    KunaAssetUnit.AdvancedUSD,
-    KunaAssetUnit.AdvancedRUB,
+    'BTC',
+    'ETH',
+    'DASH',
+    'USD',
 ];
 
 class FilterCoin extends React.PureComponent<FilterAssetsProps> {
     public render(): JSX.Element {
-        const asset = this.props.active ? getAsset(this.props.active) : undefined;
+        const asset = undefined; // this.props.active ? getAsset(this.props.active) : undefined;
 
         return (
             <TouchableOpacity onPress={this.__pressFilter}>
@@ -58,8 +54,8 @@ class FilterCoin extends React.PureComponent<FilterAssetsProps> {
 }
 
 type OuterProps = {
-    active?: KunaAssetUnit;
-    onChoose: (assetUnit?: KunaAssetUnit) => void;
+    active?: string;
+    onChoose: (assetUnit?: string) => void;
 };
 
 type FilterAssetsProps

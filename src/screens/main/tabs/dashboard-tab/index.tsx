@@ -1,7 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react/native';
 import { ScrollView, RefreshControl, StyleSheet, View } from 'react-native';
-import { KunaAssetUnit } from 'kuna-sdk';
 import AnalTracker from 'utils/ga-tracker';
 import { Color } from 'styles/variables';
 
@@ -13,7 +12,7 @@ import Constants from 'utils/constants';
 type State = {
     refreshing: boolean;
     favorite: boolean;
-    activeAsset?: KunaAssetUnit;
+    activeAsset?: string;
 };
 
 type OuterProps = {};
@@ -49,10 +48,10 @@ export default class MarketTab extends React.Component<Props, State> {
                     volumeBTC={volumeUSD.divide(BTCUSD.value()).value()}
                 />
 
-                <FavoriteTickers
-                    tickers={Ticker.getFavorite()}
-                    usdCalculator={Ticker.usdCalculator}
-                />
+                {/*<FavoriteTickers*/}
+                    {/*tickers={Ticker.getFavorite()}*/}
+                    {/*usdCalculator={Ticker.usdCalculator}*/}
+                {/*/>*/}
 
                 <View style={{ height: Constants.IS_IPHONE_X ? 90 : 60 }} />
             </ScrollView>

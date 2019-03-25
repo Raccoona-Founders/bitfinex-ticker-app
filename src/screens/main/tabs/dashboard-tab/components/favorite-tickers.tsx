@@ -2,19 +2,19 @@ import React from 'react';
 import Numeral from 'numeral';
 import { View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
-import { KunaV3Ticker, kunaMarketMap, getAsset, KunaMarket } from 'kuna-sdk';
 import { UsdCalculator } from 'utils/currency-rate';
 import SpanText from 'components/span-text';
 import { Color, DefaultStyles } from 'styles/variables';
 import ChangePercent from 'components/change-percent';
 import { CoinIcon } from 'components/coin-icon';
 import RouteKeys from 'router/route-keys';
+import {t} from "i18n-js";
 
 
 const {width} = Dimensions.get('window');
 
 type FavoriteProps = {
-    tickers: KunaV3Ticker[];
+    tickers: mobx.ticker.Ticker[];
     usdCalculator: UsdCalculator;
 };
 
@@ -42,14 +42,14 @@ export default class FavoriteTickers extends React.PureComponent<FavoriteProps> 
     private __itemRenderer = () => {
         const {usdCalculator} = this.props;
 
-        return (ticker: KunaV3Ticker) => {
+        return (ticker: mobx.ticker.Ticker) => {
 
-            const {lastPrice} = ticker;
-            const market = kunaMarketMap[ticker.symbol];
-            const baseAsset = getAsset(market.baseAsset);
-            const usdPrice = usdCalculator.getPrice(market.key);
+            const { last_price } = ticker;
+            // const market = kunaMarketMap[ticker.symbol];
+            // const baseAsset = getAsset(market.baseAsset);
+            const usdPrice = 0; // usdCalculator.getPrice(ticker.symbol);
 
-            const volume = Numeral(ticker.volume).multiply(usdPrice.value());
+            const volume = Numeral(ticker.volume).multiply(usdPrice);
 
             return (
                 <TouchableOpacity style={styles.box} key={ticker.symbol} onPress={this.__onPressMarket(market)}>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { inject } from 'mobx-react/native';
 import { ScrollView, RefreshControl, StyleSheet, View } from 'react-native';
-import { KunaAssetUnit } from 'kuna-sdk';
 import AnalTracker from 'utils/ga-tracker';
 import Constants from 'utils/constants';
 import { Color } from 'styles/variables';
@@ -10,36 +9,33 @@ import MarketList from './market-list';
 
 type State = {
     refreshing: boolean;
-    favorite: boolean;
-    activeAsset?: KunaAssetUnit;
+    activeAsset?: string;
 };
 
 type OuterProps = {};
-type Props = OuterProps & mobx.ticker.WithTickerProps;
+type Props
+    = OuterProps
+    & mobx.ticker.WithTickerProps;
 
 // @ts-ignore
 @inject('Ticker')
 export default class MarketTab extends React.Component<Props, State> {
     public state: State = {
         refreshing: false,
-        favorite: false,
         activeAsset: undefined,
     };
 
 
     public render(): JSX.Element {
         // @ts-ignore
-        const marketList = <MarketList
-            favorite={this.state.favorite}
-            activeAsset={this.state.activeAsset}
-        />;
+        const marketList = <MarketList activeAsset={this.state.activeAsset} />;
 
         return (
             <View style={styles.flatList}>
                 <View style={styles.filterTab}>
-                    <FilterCoin onChoose={this.__onChooseCoin}
-                                active={this.state.activeAsset}
-                    />
+                    {/*<FilterCoin onChoose={this.__onChooseCoin}*/}
+                        {/*active={this.state.activeAsset}*/}
+                    {/*/>*/}
                 </View>
 
                 <ScrollView
@@ -55,7 +51,7 @@ export default class MarketTab extends React.Component<Props, State> {
     }
 
 
-    private __onChooseCoin = (assetUnit?: KunaAssetUnit) => {
+    private __onChooseCoin = (assetUnit?: string) => {
         this.setState({
             activeAsset: assetUnit,
         });

@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { KunaMarket, KunaV3Ticker } from 'kuna-sdk';
 import { numFormat } from 'utils/number-helper';
 import SpanText from 'components/span-text';
 import ChangePercent from 'components/change-percent';
@@ -9,9 +8,9 @@ import styles from './market-row.styles';
 
 export default class MarketRow extends React.Component<MarketRowProps> {
     public render(): JSX.Element {
-        const {market, ticker, usdPrice, onPress, visible = true} = this.props;
+        const {ticker, onPress, visible = true} = this.props;
 
-        if (!ticker || !ticker.lastPrice) {
+        if (!ticker || !ticker.last_price) {
             return <View/>;
         }
 
@@ -23,23 +22,17 @@ export default class MarketRow extends React.Component<MarketRowProps> {
         return (
             <TouchableOpacity onPress={ticker ? onPress : undefined} style={containerStyle}>
                 <View style={styles.listItem}>
-                    <MarketNameCell market={market}/>
+                    <MarketNameCell ticker={ticker}/>
 
                     <View style={styles.tickerCell}>
                         <View style={styles.priceBox}>
                             <SpanText style={styles.priceValue}>
-                                {ticker.lastPrice ? numFormat(ticker.lastPrice || 0, market.format) : '—'}
-                                {' '}
-                                {market.quoteAsset}
+                                {ticker.last_price ? numFormat(ticker.last_price || 0, '0,0.[00]') : '—'}
                             </SpanText>
                         </View>
 
                         <View style={styles.secondaryInfo}>
-                            <SpanText style={styles.marketVolume}>
-                                ${usdPrice.format('0,0.00')}
-                            </SpanText>
-
-                            <ChangePercent percent={ticker.dailyChangePercent}
+                            <ChangePercent percent={ticker.daily_change_perc}
                                            style={{marginLeft: 8}}
                             />
                         </View>
@@ -51,9 +44,8 @@ export default class MarketRow extends React.Component<MarketRowProps> {
 }
 
 type MarketRowProps = {
-    market: KunaMarket;
-    usdPrice: Numeral;
-    ticker?: KunaV3Ticker;
+    ticker: mobx.ticker.Ticker;
+    usdPrice: number;
     visible?: boolean;
     onPress?: () => void;
 };

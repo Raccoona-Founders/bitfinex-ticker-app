@@ -11,7 +11,9 @@ declare global {
          */
         namespace ticker {
             type Ticker = {
+                key: string;
                 symbol: string;
+                type: 'futures' | 'ticker';
                 bid: number;
                 bid_size: number;
                 ask: number;
@@ -34,7 +36,7 @@ declare global {
 
                 getFavorite(): Ticker[];
 
-                getTicker(marketSymbol: string): Ticker | undefined;
+                getTicker(marketSymbol: string): Ticker;
 
                 getMarketVolume(): Numeral;
             }
