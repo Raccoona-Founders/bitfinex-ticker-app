@@ -1,15 +1,30 @@
 import React from 'react';
-import { inject } from 'mobx-react/native';
-import { ScrollView, RefreshControl, StyleSheet, View } from 'react-native';
+import { chain, key } from 'lodash';
+import { inject, observer } from 'mobx-react/native';
+import {
+    ScrollView,
+    RefreshControl,
+    StyleSheet,
+    View,
+    NativeScrollEvent,
+    NativeSyntheticEvent,
+    ActivityIndicator,
+} from 'react-native';
 import AnalTracker from 'utils/ga-tracker';
 import Constants from 'utils/constants';
 import { Color } from 'styles/variables';
 import FilterCoin from './filter-coin';
 import MarketList from './market-list';
+import SpanText from 'components/span-text';
+import { wait } from 'utils/helper';
 
 type State = {
     refreshing: boolean;
     activeAsset: string;
+    loading: boolean;
+    tickerSymbols: string[];
+    lastUpdate?: string;
+    renderCount: number;
 };
 
 type OuterProps = {};
@@ -19,29 +34,56 @@ type Props
 
 // @ts-ignore
 @inject('Ticker')
+@observer
 export default class MarketTab extends React.Component<Props, State> {
     public state: State = {
         refreshing: false,
+        loading: false,
         activeAsset: 'USD',
+        tickerSymbols: [],
+        renderCount: 10,
     };
 
 
+    public componentWillMount(): void {
+        this.setState({
+            lastUpdate: this.props.Ticker.lastUpdate,
+            tickerSymbols: this.__getEnabledMarkets(this.state.activeAsset),
+        });
+    }
+
+    public componentWillUpdate(nextProps: Readonly<Props>): void {
+        if (nextProps.Ticker.lastUpdate !== this.state.lastUpdate) {
+            this.setState({
+                lastUpdate: this.props.Ticker.lastUpdate,
+                tickerSymbols: this.__getEnabledMarkets(this.state.activeAsset),
+            });
+        }
+    }
+
+
     public render(): JSX.Element {
-        // @ts-ignore
-        const marketList = <MarketList activeAsset={this.state.activeAsset} />;
+        const { loading, activeAsset } = this.state;
 
         return (
             <View style={styles.flatList}>
                 <View style={styles.filterTab}>
-                    <FilterCoin onChoose={this.__onChooseCoin} active={this.state.activeAsset} />
+                    <FilterCoin onChoose={this.__onChooseCoin} active={activeAsset} />
                 </View>
 
                 <ScrollView
                     style={styles.flatList}
                     showsVerticalScrollIndicator={false}
                     refreshControl={this.__renderRefreshControl()}
+                    onScroll={this.__onReachScrollEnd}
+                    scrollEventThrottle={1}
                 >
-                    {marketList}
+                    {loading ? (
+                        <View style={{ height: 200, justifyContent: 'center' }}>
+                            <ActivityIndicator color={Color.Main} />
+                        </View>
+                    ) : this.__renderBody()}
+
                     <View style={{ height: Constants.IS_IPHONE_X ? 90 : 60 }} />
                 </ScrollView>
             </View>
@@ -49,10 +91,62 @@ export default class MarketTab extends React.Component<Props, State> {
     }
 
 
-    private __onChooseCoin = (assetUnit?: string) => {
+    private __renderBody = () => {
+        const { tickerSymbols, renderCount } = this.state;
+        const tickers = this.props.Ticker.getTickers(tickerSymbols);
+
+        return (
+            <>
+                <MarketList
+                    tickers={tickers}
+                    renderCount={renderCount}
+                    lastUpdate={this.props.Ticker.lastUpdate}
+                />
+
+                {tickers.length > renderCount ? <ActivityIndicator size="small" /> : undefined}
+
+                <SpanText style={{ color: Color.GrayBlues, fontSize: 12, padding: 20 }}>
+                    {this.state.lastUpdate}
+                </SpanText>
+            </>
+        );
+    };
+
+
+    private __getEnabledMarkets = (activeAsset: string): string[] => {
+        return chain(this.props.Ticker.tickers)
+            .filter((market: mobx.ticker.Ticker) => market.symbol.endsWith(activeAsset))
+            .map((market: mobx.ticker.Ticker) => market.symbol)
+            .value();
+    };
+
+
+    private __onReachScrollEnd = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+        if (this.state.loading) return;
+
+        const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+        const paddingToBottom = 20;
+        const isReachedEnd = layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
+
+        if (isReachedEnd) {
+            this.setState({
+                renderCount: this.state.renderCount + 10,
+            });
+        }
+    };
+
+
+    private __onChooseCoin = async (asset?: string): Promise<void> => {
+        const newAsset = asset || 'USD';
+
         this.setState({
-            activeAsset: assetUnit || 'USD',
+            activeAsset: newAsset,
+            renderCount: 10,
+            loading: true,
+            tickerSymbols: this.__getEnabledMarkets(newAsset),
         });
+        await wait(400);
+        this.setState({ loading: false });
     };
 
 

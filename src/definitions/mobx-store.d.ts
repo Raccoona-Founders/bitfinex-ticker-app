@@ -36,7 +36,9 @@ declare global {
 
                 getFavorite(): Ticker[];
 
-                getTicker(marketSymbol: string): Ticker;
+                getTicker(tickerSymbol: string): Ticker;
+
+                getTickers(tickerSymbols?: string[]): Ticker[];
 
                 getMarketVolume(): Numeral;
             }

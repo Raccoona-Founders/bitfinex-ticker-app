@@ -1,4 +1,4 @@
-import { get, forEach, find } from 'lodash';
+import { get, forEach, find, values, filter } from 'lodash';
 import { action, computed, observable, runInAction } from 'mobx';
 import Numeral from 'numeral';
 import ModelAsyncStorage from 'mobx-store/common/model-async-storage';
@@ -78,14 +78,23 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
     }
 
 
-    public getTicker(marketSymbol: string): mobx.ticker.Ticker {
-        const ticker = find(this.tickers, { symbol: marketSymbol });
+    public getTicker(tickerSymbol: string): mobx.ticker.Ticker {
+        const ticker = find(this.tickers, { symbol: tickerSymbol });
 
         if (!ticker) {
             throw new Error('Fuck!');
         }
 
         return ticker;
+    }
+
+
+    public getTickers(tickerSymbols?: string[]): mobx.ticker.Ticker[] {
+        if (!tickerSymbols) {
+            return values(this.tickers);
+        }
+
+        return filter(this.tickers, (t: mobx.ticker.Ticker) => tickerSymbols.indexOf(t.symbol) >= 0);
     }
 
 
@@ -134,12 +143,12 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
 
 
     @action
-    protected _fromJSON(object: Object) {
-        this.tickers = {}; //get(object, 'tickers', {});
-        this.lastUpdate = undefined; //get(object, 'lastUpdate', undefined);
+    protected _fromJSON(data: Object) {
+        this.tickers = {}; //get(data, 'tickers', {});
+        this.lastUpdate = undefined; // get(data, 'lastUpdate', undefined);
 
         this.favorite.setList(
-            get(object, 'favorite', []),
+            get(data, 'favorite', []),
         );
     }
 

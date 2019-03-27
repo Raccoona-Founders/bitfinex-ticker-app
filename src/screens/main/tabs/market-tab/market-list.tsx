@@ -1,49 +1,36 @@
 import React from 'react';
-import { values, chain, keys } from 'lodash';
+import { slice } from 'lodash';
 import { withNavigation, NavigationInjectedProps } from 'react-navigation';
-import { FlatList, ListRenderItemInfo, StyleSheet } from 'react-native';
-import { inject, observer } from 'mobx-react/native';
+import { FlatList, ListRenderItemInfo } from 'react-native';
 import MarketRow from 'components/market-row';
-import SpanText from 'components/span-text';
-import { Color } from 'styles/variables';
+import { compose } from 'recompose';
 
-type State = {};
+type Props = {
+    tickers: mobx.ticker.Ticker[];
+    renderCount?: number;
+    lastUpdate?: string;
+};
 
-// @ts-ignore
-@withNavigation
-@inject('Ticker')
-@observer
-export default class MarketList extends React.Component<Props, State> {
+class MarketList extends React.PureComponent<Props & NavigationInjectedProps> {
     public render(): JSX.Element {
         return (
-            <>
-                <FlatList data={this.__getEnabledMarkets(this.props.activeAsset)}
-                          renderItem={this.__marketRowRenderer()}
-                          initialNumToRender={10}
-                          maxToRenderPerBatch={10}
-                          scrollEnabled={false}
-                />
-                <SpanText style={{ color: Color.GrayBlues, fontSize: 12, paddingLeft: 20, paddingBottom: 20 }}>
-                    {this.props.Ticker.lastUpdate}
-                </SpanText>
-            </>
+            <FlatList data={slice(this.props.tickers, 0, this.props.renderCount)}
+                      renderItem={this.__marketRowRenderer()}
+                      initialNumToRender={10}
+                      scrollEnabled={false}
+            />
         );
     }
 
 
     private __marketRowRenderer = () => {
-        const { Ticker, activeAsset } = this.props;
-        // const enabledMarkets = this.__getEnabledMarkets(activeAsset);
-
         return (item: ListRenderItemInfo<mobx.ticker.Ticker>) => {
             const ticker = item.item;
 
-            return (
-                <MarketRow ticker={ticker}
-                           onPress={this.__pressMarketRow(ticker.symbol)}
-                           // visible={enabledMarkets.indexOf(ticker.symbol) >= 0}
-                />
-            );
+            return <MarketRow
+                ticker={ticker}
+                onPress={this.__pressMarketRow(ticker.symbol)}
+            />;
         };
     };
 
@@ -53,23 +40,6 @@ export default class MarketList extends React.Component<Props, State> {
             // this.props.navigation.navigate('Market', { symbol: market });
         };
     };
-
-
-    private __getEnabledMarkets = (activeAsset: string): mobx.ticker.Ticker[] => {
-        return chain(this.props.Ticker.tickers)
-            .filter((market: mobx.ticker.Ticker) => market.symbol.endsWith(activeAsset))
-            .value();
-    };
 }
 
-
-type OuterProps = {
-    activeAsset: string;
-};
-
-
-type Props
-    = OuterProps
-    & mobx.ticker.WithTickerProps
-    & NavigationInjectedProps;
-
+export default compose<Props & NavigationInjectedProps, Props>(withNavigation)(MarketList);
