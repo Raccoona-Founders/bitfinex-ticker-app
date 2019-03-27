@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Animated } from 'react-native';
+import { View} from 'react-native';
 import { NavigationInjectedProps } from 'react-navigation';
 import Constants from 'utils/constants';
 import Analitics from 'utils/ga-tracker';
@@ -57,21 +57,15 @@ export default class MainScreen extends React.PureComponent<MainScreenProps, Mai
     };
 
     protected renderScene = (props: SlideView.SceneRendererProps<TabnavRoute> & SlideView.Scene<TabnavRoute>) => {
-        const { sceneComponent, index } = props.route;
-        const { position } = props;
-
-        const scale = position.interpolate({
-            inputRange: [index - 1, index, index + 1],
-            outputRange: [0.9, 1, 0.9],
-        });
+        const { sceneComponent } = props.route;
 
         return (
-            <Animated.View style={{ flex: 1, transform: [{ scale: scale }] }}>
+            <View style={{ flex: 1 }}>
                 {React.createElement(sceneComponent, {
                     route: props.route,
                     focused: props.focused,
                 })}
-            </Animated.View>
+            </View>
         );
     };
 

@@ -1,13 +1,13 @@
-import BitfinexMarket from './market';
+import Market from './market';
 
 export default class MarketManager {
-    protected cache: Record<string, BitfinexMarket> = {};
+    protected cache: Record<string, mobx.ticker.Market> = {};
 
-    getMarket(symbol: string): BitfinexMarket {
+    getMarket(symbol: string): mobx.ticker.Market {
         if (symbol in this.cache) {
             return this.cache[symbol];
         }
 
-        return this.cache[symbol] = new BitfinexMarket();
+        return this.cache[symbol] = new Market();
     }
 }

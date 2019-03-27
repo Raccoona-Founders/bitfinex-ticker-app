@@ -48,10 +48,10 @@ export default class MarketTab extends React.Component<Props, State> {
                     volumeBTC={volumeUSD.multiply(usdToBtc).value()}
                 />
 
-                {/*<FavoriteTickers*/}
-                    {/*tickers={Ticker.getFavorite()}*/}
-                    {/*usdCalculator={Ticker.usdCalculator}*/}
-                {/*/>*/}
+                <FavoriteTickers
+                    tickers={Ticker.getFavorite()}
+                    usdCalculator={Ticker.usdCalculator}
+                />
 
                 <View style={{ height: Constants.IS_IPHONE_X ? 90 : 60 }} />
             </ScrollView>

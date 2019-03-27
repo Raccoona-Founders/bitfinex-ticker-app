@@ -1,10 +1,4 @@
-export type Coin = {
-    shortSymbol: string;
-    symbol: string;
-    name: string;
-}
-
-export const coinList: Record<string, Coin> = {
+export const coinList: Record<string, mobx.ticker.Coin> = {
     USD: {
         shortSymbol: 'USD',
         symbol: 'USD',

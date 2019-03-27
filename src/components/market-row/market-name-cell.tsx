@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { SpanText } from 'components/span-text';
-import { CoinIcon } from 'components/coin-icon';
+import CoinIcon from 'components/coin-icon';
 import { Color } from 'styles/variables';
 
 type MarketNameProps = {

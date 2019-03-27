@@ -6,10 +6,10 @@ import { _ } from 'utils/i18n';
 import { ShadeScrollCard } from 'components/shade-navigator';
 import Topic from 'components/topic';
 import SpanText from 'components/span-text';
+import CoinIcon from 'components/coin-icon';
 
-import styles from './select-asset.style';
 import { Color } from 'styles/variables';
-import { CoinIcon } from 'components/coin-icon';
+import styles from './select-asset.style';
 
 export type SelectAssetParams = {
     title?: string;

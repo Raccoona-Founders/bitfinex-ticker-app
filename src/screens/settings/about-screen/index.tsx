@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Linking, TouchableOpacity } from 'react-native';
-import qs from 'querystring';
 import { SpanText } from 'components/span-text';
 import { ShadeScrollCard } from 'components/shade-navigator';
 import Analytics from 'utils/ga-tracker';
@@ -10,9 +9,8 @@ import MDMessage from 'components/md-message';
 import { styles } from './about-screen.style';
 import textContent from './text-content';
 
-
+const qs = require('querystring');
 const language: string = i18n.currentLocale().split('-')[0];
-
 
 type LinkItem = {
     title: string;
@@ -26,12 +24,8 @@ type SettingsProps = mobx.user.WithUserProps;
 
 const links: LinkItem[] = [{
     title: _('about.github'),
-    label: 'CoinWizard/kuna-ticker-app',
-    url: 'https://github.com/Raccoona-Crypto/kuna-ticker-app',
-}, {
-    title: _('about.roadmap'),
-    label: 'Trello Board',
-    url: 'https://trello.com/b/9k4PHBO4/kuna-tiker-roadmap',
+    label: 'Raccoona-Crypto/bitfinex-ticker-app',
+    url: 'https://github.com/Raccoona-Crypto/bitfinex-ticker-app',
 }, {
     title: _('about.website'),
     label: 'coinwizard.github.io/kuna-ticker-app',
@@ -44,7 +38,7 @@ const links: LinkItem[] = [{
 }, {
     title: _('about.email'),
     label: 'maksym.tymchyk@gmail.com',
-    url: `mailto:maksym.tymchyk@gmail.com?${qs.stringify({ subject: 'Kuna Ticker' })}`,
+    url: `mailto:maksym.tymchyk@gmail.com?${qs.stringify({ subject: 'Bitfinex Ticker' })}`,
 }];
 
 

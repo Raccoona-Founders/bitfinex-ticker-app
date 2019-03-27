@@ -1,7 +1,7 @@
 import React from 'react';
 import { slice } from 'lodash';
 import { withNavigation, NavigationInjectedProps } from 'react-navigation';
-import { FlatList, ListRenderItemInfo } from 'react-native';
+import { FlatList, ListRenderItemInfo, View } from 'react-native';
 import MarketRow from 'components/market-row';
 import { compose } from 'recompose';
 
@@ -14,20 +14,17 @@ type Props = {
 class MarketList extends React.PureComponent<Props & NavigationInjectedProps> {
     public render(): JSX.Element {
         return (
-            <FlatList data={slice(this.props.tickers, 0, this.props.renderCount)}
-                      renderItem={this.__marketRowRenderer()}
-                      initialNumToRender={10}
-                      scrollEnabled={false}
-            />
+            <View>
+                {slice(this.props.tickers, 0, this.props.renderCount).map(this.__marketRowRenderer())}
+            </View>
         );
     }
 
 
     private __marketRowRenderer = () => {
-        return (item: ListRenderItemInfo<mobx.ticker.Ticker>) => {
-            const ticker = item.item;
-
+        return (ticker: mobx.ticker.Ticker) => {
             return <MarketRow
+                key={ticker.symbol}
                 ticker={ticker}
                 onPress={this.__pressMarketRow(ticker.symbol)}
             />;

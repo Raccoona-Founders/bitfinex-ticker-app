@@ -1,5 +1,5 @@
 import React from 'react';
-import { chain, key } from 'lodash';
+import { chain } from 'lodash';
 import { inject, observer } from 'mobx-react/native';
 import {
     ScrollView,

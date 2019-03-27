@@ -1,17 +1,20 @@
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { numFormat } from 'utils/number-helper';
 import SpanText from 'components/span-text';
 import ChangePercent from 'components/change-percent';
 import { MarketNameCell } from './market-name-cell';
 import styles from './market-row.styles';
+import { renderPrice } from 'utils/helper';
 
 
 type MarketRowProps = {
     ticker: mobx.ticker.Ticker;
     visible?: boolean;
     onPress?: () => void;
-};
+}
+
+
+
 
 export default (props: MarketRowProps): JSX.Element => {
     const { ticker, onPress, visible = true } = props;
@@ -32,9 +35,7 @@ export default (props: MarketRowProps): JSX.Element => {
 
                 <View style={styles.tickerCell}>
                     <View style={styles.priceBox}>
-                        <SpanText style={styles.priceValue}>
-                            {ticker.last_price ? numFormat(ticker.last_price || 0, '0,0.[00]') : '—'}
-                        </SpanText>
+                        <SpanText style={styles.priceValue}>{renderPrice(ticker.last_price)}</SpanText>
                     </View>
 
                     <View style={styles.secondaryInfo}>

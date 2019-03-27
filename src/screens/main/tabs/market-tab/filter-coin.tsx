@@ -7,7 +7,7 @@ import { SelectAssetParams } from 'screens/service/select-asset';
 import { Color } from 'styles/variables';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import RouteKeys from 'router/route-keys';
-import { CoinIcon } from 'components/coin-icon';
+import CoinIcon from 'components/coin-icon';
 
 const assets: string[] = [
     'USD',

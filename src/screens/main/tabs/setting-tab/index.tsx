@@ -30,13 +30,13 @@ export default class SettingTab extends React.Component<SettingsProps> {
     };
 
     public render(): JSX.Element {
-        const {User} = this.props;
-        const {rateLoading = false} = this.state;
+        const { User } = this.props;
+        const { rateLoading = false } = this.state;
 
         return (
             <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
                 <View style={styles.preContent}>
-                    <SpanText style={{fontWeight: 'bold', fontSize: 32}}>Settings</SpanText>
+                    <SpanText style={{ fontWeight: 'bold', fontSize: 32 }}>Settings</SpanText>
                     <SpanText style={styles.userId}>User ID: {User.userId}</SpanText>
                 </View>
                 <View style={styles.menuBox}>
@@ -49,15 +49,15 @@ export default class SettingTab extends React.Component<SettingsProps> {
                               onPress={this.__rateApplication}
                     />
 
-                    <View style={styles.separator}/>
+                    <View style={styles.separator} />
 
                     <View style={styles.settingFooter}>
 
-                        <Icon name="raccoona" height={20} fill={Color.GrayBlues}/>
+                        <Icon name="raccoona" height={20} fill={Color.GrayBlues} />
                     </View>
                 </View>
 
-                <View style={{height: Constants.IS_IPHONE_X ? 90 : 60}}/>
+                <View style={{ height: Constants.IS_IPHONE_X ? 90 : 60 }} />
             </ScrollView>
         );
     }
@@ -73,7 +73,7 @@ export default class SettingTab extends React.Component<SettingsProps> {
         };
 
         AnalTracker.logEvent('Rate_Click');
-        this.setState({rateLoading: true});
+        this.setState({ rateLoading: true });
 
         Rate.rate(options, success => {
             if (success) {
@@ -81,10 +81,10 @@ export default class SettingTab extends React.Component<SettingsProps> {
 
                 // this technically only tells us if the user successfully
                 // went to the Review Page. Whether they actually did anything, we do not know.
-                this.setState({rated: true});
+                this.setState({ rated: true });
             }
 
-            this.setState({rateLoading: false});
+            this.setState({ rateLoading: false });
         });
     };
 }

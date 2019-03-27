@@ -2,8 +2,8 @@ import React from 'react';
 import { View, StyleProp, ViewStyle, StyleSheet } from 'react-native';
 import SvgIcon from 'react-native-svg-icon';
 import { SpanText } from 'components/span-text';
+import { Color, DefaultStyles } from 'styles/variables';
 import { svgIcons, findIcon } from './svg-icons';
-import { DefaultStyles } from 'styles/variables';
 
 type CoinIconProps = {
     asset: string;
@@ -14,10 +14,10 @@ type CoinIconProps = {
     style?: StyleProp<ViewStyle>;
 };
 
-export const CoinIcon = (props: CoinIconProps) => {
+export default (props: CoinIconProps) => {
     const { size = 32, asset, style = {} } = props;
 
-    const coinIconStyle = {
+    const coinBackgroundStyle = {
         height: size,
         width: size,
     };
@@ -26,22 +26,22 @@ export const CoinIcon = (props: CoinIconProps) => {
 
     if (!existsIcon) {
         const symbolContainerStyle: any = {
-            width: size,
-            height: size,
-            fontSize: size * 0.375,
-            lineHeight: size,
+            width: '100%',
+            fontSize: size * 0.3125,
             textAlign: 'center',
+            color: Color.Secondary,
         };
 
         const iconStyle = [
             styles.onlySymbolText,
-            { color: '#000' },
             symbolContainerStyle,
         ];
 
         return (
-            <View style={[coinIconStyle, style]}>
-                <SpanText style={iconStyle}>{asset.toUpperCase()}</SpanText>
+            <View style={[coinBackgroundStyle, styles.onlySymbolView, style]}>
+                <View style={styles.onlySymbolBox}>
+                    <SpanText style={iconStyle}>{asset.toUpperCase()}</SpanText>
+                </View>
             </View>
         );
     }
@@ -53,12 +53,12 @@ export const CoinIcon = (props: CoinIconProps) => {
     };
 
     return (
-        <View style={[coinIconStyle, style]}>
+        <View style={[coinBackgroundStyle, style]}>
             <SvgIcon svgs={svgIcons}
                      name={asset}
                      width={size}
                      height={size}
-                     fill="#000"
+                     fill={Color.Main}
                      style={svgShapeIconStyle}
             />
         </View>
@@ -70,10 +70,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    onlySymbolBox: {
+        width: '100%',
+    },
     onlySymbolText: {
         ...DefaultStyles.boldFont,
-        position: 'absolute',
-        top: 0,
-        left: 0,
     },
 });

@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
 
     preContent: {
         flex: 1,
-        backgroundColor: Color.GrayLight,
+        backgroundColor: Color.GrayWhite,
         borderRadius: 5,
         justifyContent: 'center',
         alignItems: 'center',

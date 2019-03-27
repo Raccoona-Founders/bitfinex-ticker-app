@@ -9,7 +9,7 @@ import RouteKeys from 'router/route-keys';
 import AnalTracker from 'utils/ga-tracker';
 import { _ } from 'utils/i18n';
 import { numFormat } from 'utils/number-helper';
-import { CoinIcon } from 'components/coin-icon';
+import CoinIcon from 'components/coin-icon';
 import SpanText from 'components/span-text';
 import UIIconButton from 'components/ui-icon-button';
 import { ShadeScrollCard } from 'components/shade-navigator';

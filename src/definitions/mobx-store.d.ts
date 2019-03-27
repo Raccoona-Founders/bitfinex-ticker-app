@@ -1,4 +1,4 @@
-import {UsdCalculator} from 'utils/currency-rate';
+import { UsdCalculator } from 'utils/currency-rate';
 
 declare global {
     export namespace mobx {
@@ -10,6 +10,28 @@ declare global {
          * This model helps us to track Ticker list
          */
         namespace ticker {
+            interface Market {
+                symbol(): string;
+
+                baseAsset(): string;
+
+                baseName(): string;
+
+                isBaseFiat(): boolean;
+
+                quoteAsset(): string;
+
+                quoteName(): string;
+
+                isQuoteFiat(): boolean;
+            }
+
+            type Coin = {
+                shortSymbol: string;
+                symbol: string;
+                name: string;
+            };
+
             type Ticker = {
                 key: string;
                 symbol: string;

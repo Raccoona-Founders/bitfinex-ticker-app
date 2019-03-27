@@ -48,8 +48,6 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
                 const newT = Helper.mapTicker(ticker);
                 if (newT.type === 'ticker') newTickers[ticker[0]] = newT;
             });
-
-            console.log(newTickers);
         } catch (e) {
         }
 
@@ -144,12 +142,10 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
 
     @action
     protected _fromJSON(data: Object) {
-        this.tickers = {}; //get(data, 'tickers', {});
-        this.lastUpdate = undefined; // get(data, 'lastUpdate', undefined);
+        this.tickers = get(data, 'tickers', {});
+        this.lastUpdate = get(data, 'lastUpdate', undefined);
 
-        this.favorite.setList(
-            get(data, 'favorite', []),
-        );
+        this.favorite.setList(get(data, 'favorite', []));
     }
 
 
