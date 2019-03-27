@@ -123,7 +123,7 @@ export default class CalculatorScreen extends React.Component<CalculatorScreenPr
 
 
         const usdCalculator = Ticker.usdCalculator;
-        const usdPrice = usdCalculator.getPrice(currentMarket.key);
+        const usdPrice = usdCalculator.getUsdPrice(currentMarket.key);
 
 
         return (

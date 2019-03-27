@@ -26,17 +26,17 @@ export type TabnavRoute = {
 
 export const tabNavigationRoutes: TabnavRoute[] = [
     {
-        key: 'DASHBOARD',
+        key: 'Dashboard',
         title: _('menu.dashboard'),
         index: 0,
         sceneComponent: Tabs.DashboardTab,
     }, {
-        key: 'MARKETS',
+        key: 'Markets',
         title: _('menu.markets'),
         index: 1,
         sceneComponent: Tabs.MarketTab,
     },{
-        key: 'SETTINGS',
+        key: 'Settings',
         title: _('menu.setting'),
         index: 2,
         sceneComponent: Tabs.SettingTab,

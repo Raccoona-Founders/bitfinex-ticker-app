@@ -8,7 +8,6 @@ import { tabNavigationRoutes, TabnavRoute, TabBarComponent } from './components/
 import PreviewWrapper from './components/preview-wrapper';
 import { mainStyles } from './styles';
 
-
 type MainScreenState = {
     index: number;
     routes: TabnavRoute[];
@@ -79,6 +78,6 @@ export default class MainScreen extends React.PureComponent<MainScreenProps, Mai
     protected trackScreen = () => {
         const { index, routes } = this.state;
 
-        Analitics.trackScreen(`main/${routes[index].key}`, 'MainScreen');
+        Analitics.trackScreen(`Main.${routes[index].key}`, 'MainScreen');
     };
 }

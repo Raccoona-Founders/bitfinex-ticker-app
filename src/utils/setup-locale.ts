@@ -5,7 +5,7 @@ numeral.nullFormat('0.0');
 
 numeral.register('locale', 'ua', {
     delimiters: {
-        thousands: ' ',
+        thousands: ',',
         decimal: '.'
     },
     abbreviations: {

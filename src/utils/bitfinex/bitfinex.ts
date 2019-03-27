@@ -1,4 +1,4 @@
-import Axios, {AxiosInstance} from 'axios';
+import Axios, { AxiosInstance } from 'axios';
 
 export type BitfinexTicker
     = [string, number, number, number, number, number, number, number, number, number, number];
@@ -15,7 +15,7 @@ export default class Bitfinex {
     public async tickers(symbols?: string[]): Promise<BitfinexTicker[]> {
         const symbolsString = symbols ? symbols.join(',') : 'ALL';
 
-        const {data} = await this.client.get(`/tickers?symbols=${symbolsString}`);
+        const { data } = await this.client.get(`/tickers?symbols=${symbolsString}`);
 
         return data;
     }

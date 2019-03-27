@@ -9,7 +9,7 @@ import MarketList from './market-list';
 
 type State = {
     refreshing: boolean;
-    activeAsset?: string;
+    activeAsset: string;
 };
 
 type OuterProps = {};
@@ -22,7 +22,7 @@ type Props
 export default class MarketTab extends React.Component<Props, State> {
     public state: State = {
         refreshing: false,
-        activeAsset: undefined,
+        activeAsset: 'USD',
     };
 
 
@@ -33,9 +33,7 @@ export default class MarketTab extends React.Component<Props, State> {
         return (
             <View style={styles.flatList}>
                 <View style={styles.filterTab}>
-                    {/*<FilterCoin onChoose={this.__onChooseCoin}*/}
-                        {/*active={this.state.activeAsset}*/}
-                    {/*/>*/}
+                    <FilterCoin onChoose={this.__onChooseCoin} active={this.state.activeAsset} />
                 </View>
 
                 <ScrollView
@@ -53,7 +51,7 @@ export default class MarketTab extends React.Component<Props, State> {
 
     private __onChooseCoin = (assetUnit?: string) => {
         this.setState({
-            activeAsset: assetUnit,
+            activeAsset: assetUnit || 'USD',
         });
     };
 

@@ -10,15 +10,21 @@ import RouteKeys from 'router/route-keys';
 import { CoinIcon } from 'components/coin-icon';
 
 const assets: string[] = [
+    'USD',
+    'EUR',
+    'GBP',
+    'JPY',
     'BTC',
     'ETH',
-    'DASH',
-    'USD',
+    'EOS',
+    'XLM',
+    'DAI',
+    'UST',
 ];
 
 class FilterCoin extends React.PureComponent<FilterAssetsProps> {
     public render(): JSX.Element {
-        const asset = undefined; // this.props.active ? getAsset(this.props.active) : undefined;
+        const asset = this.props.active ? this.props.active : undefined;
 
         return (
             <TouchableOpacity onPress={this.__pressFilter}>
@@ -45,7 +51,6 @@ class FilterCoin extends React.PureComponent<FilterAssetsProps> {
 
     protected __pressFilter = () => {
         this.props.navigation.push(RouteKeys.Service_SelectAsset, {
-            emptyAsset: true,
             currentAsset: this.props.active,
             assets: assets,
             onSelect: this.props.onChoose,

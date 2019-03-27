@@ -17,10 +17,10 @@ export default class MarketList extends React.Component<Props, State> {
     public render(): JSX.Element {
         return (
             <>
-                <FlatList data={values(this.props.Ticker.tickers)}
+                <FlatList data={this.__getEnabledMarkets(this.props.activeAsset)}
                           renderItem={this.__marketRowRenderer()}
                           initialNumToRender={10}
-                          maxToRenderPerBatch={5}
+                          maxToRenderPerBatch={10}
                           scrollEnabled={false}
                 />
                 <SpanText style={{ color: Color.GrayBlues, fontSize: 12, paddingLeft: 20, paddingBottom: 20 }}>
@@ -33,17 +33,15 @@ export default class MarketList extends React.Component<Props, State> {
 
     private __marketRowRenderer = () => {
         const { Ticker, activeAsset } = this.props;
-        const enabledMarkets = this.__getEnabledMarkets(activeAsset);
+        // const enabledMarkets = this.__getEnabledMarkets(activeAsset);
 
         return (item: ListRenderItemInfo<mobx.ticker.Ticker>) => {
             const ticker = item.item;
-            const usdPrice = 0; //Ticker.usdCalculator.getPrice(symbol);
 
             return (
                 <MarketRow ticker={ticker}
-                           usdPrice={usdPrice}
                            onPress={this.__pressMarketRow(ticker.symbol)}
-                           visible={enabledMarkets.indexOf(ticker.symbol) >= 0}
+                           // visible={enabledMarkets.indexOf(ticker.symbol) >= 0}
                 />
             );
         };
@@ -56,22 +54,22 @@ export default class MarketList extends React.Component<Props, State> {
         };
     };
 
-    private __getEnabledMarkets = (activeAsset?: string): string[] => {
-        if (!activeAsset) {
-            return Object.keys(this.props.Ticker.tickers);
-        }
 
+    private __getEnabledMarkets = (activeAsset: string): mobx.ticker.Ticker[] => {
         return chain(this.props.Ticker.tickers)
-            .map((market: mobx.ticker.Ticker): string => market.symbol)
+            .filter((market: mobx.ticker.Ticker) => market.symbol.endsWith(activeAsset))
             .value();
     };
 }
 
+
 type OuterProps = {
-    activeAsset?: string;
+    activeAsset: string;
 };
+
 
 type Props
     = OuterProps
     & mobx.ticker.WithTickerProps
     & NavigationInjectedProps;
+

@@ -21,7 +21,7 @@ export default (props: ChangePercentProps): JSX.Element => {
                 style={[styles.caret, isPositive ? styles.caretUp : styles.caretDown]}
             />
             <SpanText style={[styles.label, isPositive ? styles.labelUp : styles.labelDown]}>
-                ({numeral(props.percent).format('0,0.[00]')}%)
+                ({numeral(props.percent).format('0,0.[00]%')})
             </SpanText>
         </View>
     );

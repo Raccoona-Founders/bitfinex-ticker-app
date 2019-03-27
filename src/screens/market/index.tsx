@@ -66,7 +66,7 @@ export default class MarketScreen extends React.Component<MarketScreenProps, Sta
         const quoteAsset = getAsset(currentMarket.quoteAsset);
         const baseAsset = getAsset(currentMarket.baseAsset);
 
-        const usdPrice = Ticker.usdCalculator.getPrice(symbol);
+        const usdPrice = Ticker.usdCalculator.getUsdPrice(symbol);
 
         return (
             <ShadeScrollCard renderFooter={this.__renderFooter}>

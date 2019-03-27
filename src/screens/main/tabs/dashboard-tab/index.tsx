@@ -35,7 +35,7 @@ export default class MarketTab extends React.Component<Props, State> {
         const { Ticker } = this.props;
 
         const volumeUSD = Ticker.getMarketVolume();
-        const BTCUSD = Ticker.usdCalculator.getPrice('btcuah');
+        const usdToBtc = Ticker.usdCalculator.getBtcPrice('fBTCUSD');
 
         return (
             <ScrollView
@@ -45,7 +45,7 @@ export default class MarketTab extends React.Component<Props, State> {
             >
                 <VolumeCard
                     volumeUSD={volumeUSD.value()}
-                    volumeBTC={volumeUSD.divide(BTCUSD.value()).value()}
+                    volumeBTC={volumeUSD.multiply(usdToBtc).value()}
                 />
 
                 {/*<FavoriteTickers*/}

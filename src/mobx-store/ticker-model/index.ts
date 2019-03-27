@@ -1,9 +1,9 @@
-import {get, forEach, find} from 'lodash';
-import {action, computed, observable, runInAction} from 'mobx';
+import { get, forEach, find } from 'lodash';
+import { action, computed, observable, runInAction } from 'mobx';
 import Numeral from 'numeral';
 import ModelAsyncStorage from 'mobx-store/common/model-async-storage';
-import {UsdCalculator} from 'utils/currency-rate';
-import {BitfinexClient} from 'utils/bitfinex';
+import { UsdCalculator } from 'utils/currency-rate';
+import { BitfinexClient } from 'utils/bitfinex';
 import FavoriteModel from './favorite-model';
 import Helper from './helper';
 
@@ -45,7 +45,8 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
         try {
             const tickers = await BitfinexClient.tickers();
             forEach(tickers, (ticker) => {
-                newTickers[ticker[0]] = Helper.mapTicker(ticker);
+                const newT = Helper.mapTicker(ticker);
+                if (newT.type === 'ticker') newTickers[ticker[0]] = newT;
             });
 
             console.log(newTickers);
@@ -78,7 +79,7 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
 
 
     public getTicker(marketSymbol: string): mobx.ticker.Ticker {
-        const ticker = find(this.tickers, {symbol: marketSymbol});
+        const ticker = find(this.tickers, { symbol: marketSymbol });
 
         if (!ticker) {
             throw new Error('Fuck!');
@@ -93,8 +94,14 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
         const calculator = this.usdCalculator;
 
         forEach(this.tickers, (ticker: mobx.ticker.Ticker, market: string) => {
-            if (ticker.symbol.endsWith('USD') && ticker.type === 'ticker') {
+            if (ticker.type !== 'ticker') {
+                return;
+            }
+
+            if (ticker.symbol.endsWith('USD')) {
                 sum += ticker.volume;
+            } else {
+                sum += calculator.getUsdPrice(ticker.symbol).multiply(ticker.volume).value();
             }
         });
 
@@ -104,7 +111,7 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
 
     @computed
     public get usdCalculator(): UsdCalculator {
-        return new UsdCalculator(27, {});
+        return new UsdCalculator(this.tickers);
     }
 
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
-import { getAsset, KunaAsset, KunaAssetUnit } from 'kuna-sdk';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { _ } from 'utils/i18n';
 import { ShadeScrollCard } from 'components/shade-navigator';
@@ -16,9 +15,9 @@ export type SelectAssetParams = {
     title?: string;
     description?: string;
     emptyAsset?: boolean;
-    assets?: KunaAssetUnit[];
-    currentAsset?: KunaAssetUnit;
-    onSelect: (newAsset: KunaAssetUnit | undefined) => void;
+    assets?: string[];
+    currentAsset?: string;
+    onSelect: (newAsset?: string) => void;
 };
 
 type SelectAssetProps
@@ -27,7 +26,7 @@ type SelectAssetProps
 export default class SelectAssetScreen extends React.PureComponent<SelectAssetProps> {
     public render(): JSX.Element {
         const { navigation } = this.props;
-        const assets: Array<KunaAssetUnit | undefined> = navigation.getParam('assets') || [];
+        const assets: Array<string | undefined> = navigation.getParam('assets') || [];
 
         const emptyAsset = navigation.getParam('emptyAsset') || false;
 
@@ -53,27 +52,22 @@ export default class SelectAssetScreen extends React.PureComponent<SelectAssetPr
         const { navigation } = this.props;
         const currentAsset = navigation.getParam('currentAsset') || undefined;
 
-        return (asset: KunaAssetUnit | undefined, index: number) => {
-            let coinAsset: KunaAsset | undefined;
-            if (asset) {
-                coinAsset = getAsset(asset);
-            }
-
+        return (asset: string | undefined, index: number) => {
             return (
                 <View key={index}>
                     <TouchableOpacity onPress={() => this.__onSelectAsset(asset)} style={styles.row}>
                         <View style={styles.coinInfo}>
-                            {coinAsset ? (
+                            {asset ? (
                                 <>
-                                    <CoinIcon asset={coinAsset}
+                                    <CoinIcon asset={asset}
                                               withShadow={false}
                                               naked={true}
                                               style={styles.coinIcon}
                                               size={40}
                                     />
                                     <View style={styles.coinTitleBox}>
-                                        <SpanText style={[styles.coinTitle, { fontWeight: 'bold' }]}>{coinAsset.key}</SpanText>
-                                        <SpanText style={styles.coinTitle}> - {coinAsset.name}</SpanText>
+                                        <SpanText style={[styles.coinTitle, { fontWeight: 'bold' }]}>{asset}</SpanText>
+                                        <SpanText style={styles.coinTitle}> - {asset}</SpanText>
                                     </View>
                                 </>
                             ) : (
@@ -93,7 +87,7 @@ export default class SelectAssetScreen extends React.PureComponent<SelectAssetPr
     }
 
 
-    private __onSelectAsset = (asset: KunaAssetUnit | undefined) => {
+    private __onSelectAsset = (asset?: string) => {
         const { navigation } = this.props;
         const onSelect = navigation.getParam('onSelect');
 
