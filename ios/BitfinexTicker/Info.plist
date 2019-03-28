@@ -23,7 +23,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>4</string>
+	<string>6</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.finance</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -39,12 +39,16 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
-	<key>NSFaceIDUsageDescription</key>
-	<string>Used to unlock your Private data</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Used to scan  QR Codes</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Used to unlock your Private data</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Used to generate best propose to trade cryptocurrency</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Used to generate best propose to trade cryptocurrency</string>
+	<key>NSLocationWhenInUseUsageDescription </key>
+	<string></string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
