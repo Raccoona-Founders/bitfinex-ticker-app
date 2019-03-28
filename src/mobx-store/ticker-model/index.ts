@@ -2,6 +2,7 @@ import { get, forEach, find, values, filter } from 'lodash';
 import { action, computed, observable, runInAction } from 'mobx';
 import Numeral from 'numeral';
 import ModelAsyncStorage from 'mobx-store/common/model-async-storage';
+import MarketProvider from 'utils/bitfinex-market';
 import { UsdCalculator } from 'utils/currency-rate';
 import { BitfinexClient } from 'utils/bitfinex';
 import FavoriteModel from './favorite-model';
@@ -9,15 +10,17 @@ import Helper from './helper';
 
 const TICKER_UPDATE_TIMEOUT = 10 * 60 * 1000;
 
-export default class TickerModel extends ModelAsyncStorage implements mobx.ticker.TickerModel {
+export default class TickerModel extends ModelAsyncStorage implements mobx.ticker.ITickerModel {
     @observable
-    public tickers: Record<string, mobx.ticker.Ticker> = {};
+    public tickers: Record<string, mobx.ticker.TTicker> = {};
 
     @observable
-    public favorite: mobx.ticker.FavoriteModel;
+    public favorite: mobx.ticker.IFavoriteModel;
 
     @observable
     public lastUpdate?: string;
+
+    protected marketProvider: MarketProvider;
 
 
     @action
@@ -30,6 +33,7 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
         super();
 
         this.favorite = new FavoriteModel();
+        this.marketProvider = new MarketProvider();
     }
 
 
@@ -40,7 +44,7 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
 
     @action
     public fetchTickers = async (): Promise<void> => {
-        const newTickers: Record<string, mobx.ticker.Ticker> = {};
+        const newTickers: Record<string, mobx.ticker.TTicker> = {};
 
         try {
             const tickers = await BitfinexClient.tickers();
@@ -52,21 +56,18 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
         }
 
         runInAction(() => {
-            this.tickers = {
-                ...this.tickers,
-                ...newTickers,
-            };
+            this.tickers = newTickers;
             this.lastUpdate = new Date().toISOString();
         });
     };
 
 
-    public getFavorite(): mobx.ticker.Ticker[] {
+    public getFavorite(): mobx.ticker.TTicker[] {
         const list = this.favorite.getList();
 
-        const tickers: mobx.ticker.Ticker[] = [];
+        const tickers: mobx.ticker.TTicker[] = [];
 
-        forEach(this.tickers, (ticker: mobx.ticker.Ticker) => {
+        forEach(this.tickers, (ticker: mobx.ticker.TTicker) => {
             if (list.indexOf(ticker.symbol) >= 0) {
                 tickers.push(ticker);
             }
@@ -76,7 +77,17 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
     }
 
 
-    public getTicker(tickerSymbol: string): mobx.ticker.Ticker {
+    public getMarket(symbol: string): mobx.ticker.IMarket {
+        return this.marketProvider.getMarket(symbol);
+    }
+
+
+    public getMarketProvider(): mobx.ticker.IMarketProvider {
+        return this.marketProvider;
+    }
+
+
+    public getTicker(tickerSymbol: string): mobx.ticker.TTicker {
         const ticker = find(this.tickers, { symbol: tickerSymbol });
 
         if (!ticker) {
@@ -87,12 +98,12 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
     }
 
 
-    public getTickers(tickerSymbols?: string[]): mobx.ticker.Ticker[] {
+    public getTickers(tickerSymbols?: string[]): mobx.ticker.TTicker[] {
         if (!tickerSymbols) {
             return values(this.tickers);
         }
 
-        return filter(this.tickers, (t: mobx.ticker.Ticker) => tickerSymbols.indexOf(t.symbol) >= 0);
+        return filter(this.tickers, (t: mobx.ticker.TTicker) => tickerSymbols.indexOf(t.symbol) >= 0);
     }
 
 
@@ -100,7 +111,7 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
         let sum = 0;
         const calculator = this.usdCalculator;
 
-        forEach(this.tickers, (ticker: mobx.ticker.Ticker, market: string) => {
+        forEach(this.tickers, (ticker: mobx.ticker.TTicker, market: string) => {
             if (ticker.type !== 'ticker') {
                 return;
             }
@@ -145,7 +156,7 @@ export default class TickerModel extends ModelAsyncStorage implements mobx.ticke
         this.tickers = get(data, 'tickers', {});
         this.lastUpdate = get(data, 'lastUpdate', undefined);
 
-        this.favorite.setList(get(data, 'favorite', []));
+        this.favorite.setList(get(data, 'favorite', undefined));
     }
 
 

@@ -3,11 +3,11 @@ import { action, observable } from 'mobx';
 const defaultList = [
     'tBTCUSD',
     'tETHUSD',
-    'tDSHBTC',
-    'tETHBTC',
+    'tLTCUSD',
+    'tDSHUSD',
 ];
 
-export default class FavoriteModel implements mobx.ticker.FavoriteModel {
+export default class FavoriteModel implements mobx.ticker.IFavoriteModel {
     @observable
     protected _symbols: Array<string> = defaultList;
 
@@ -34,8 +34,8 @@ export default class FavoriteModel implements mobx.ticker.FavoriteModel {
     }
 
     @action
-    public setList(marketSymbols: string[]): void {
-        this._symbols = marketSymbols.length
+    public setList(marketSymbols?: string[]): void {
+        this._symbols = marketSymbols
             ? marketSymbols
             : defaultList;
     }

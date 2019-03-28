@@ -7,7 +7,7 @@ import { svgIcons, findIcon } from './svg-icons';
 
 type CoinIconProps = {
     asset: string;
-
+    color?: string;
     withShadow?: boolean;
     naked?: boolean;
     size?: number;
@@ -15,7 +15,7 @@ type CoinIconProps = {
 };
 
 export default (props: CoinIconProps) => {
-    const { size = 32, asset, style = {} } = props;
+    const { size = 32, asset, style = {}, color = Color.GrayBlues } = props;
 
     const coinBackgroundStyle = {
         height: size,
@@ -27,9 +27,9 @@ export default (props: CoinIconProps) => {
     if (!existsIcon) {
         const symbolContainerStyle: any = {
             width: '100%',
-            fontSize: size * 0.3125,
+            fontSize: size * 0.375,
             textAlign: 'center',
-            color: Color.Secondary,
+            color: color,
         };
 
         const iconStyle = [
@@ -58,7 +58,7 @@ export default (props: CoinIconProps) => {
                      name={asset}
                      width={size}
                      height={size}
-                     fill={Color.Main}
+                     fill={color}
                      style={svgShapeIconStyle}
             />
         </View>

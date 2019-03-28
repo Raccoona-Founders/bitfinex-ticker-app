@@ -57,7 +57,7 @@ export default class UIButton extends React.PureComponent<UIButtonProps> {
             this.props.white && styles.whiteBtn,
             this.props.danger && styles.dangerBtn,
             this.props.style,
-            this.props.disabled && { backgroundColor: Color.PurpleNoactive },
+            this.props.disabled && { backgroundColor: Color.GrayNoactive },
         ]);
     };
 
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     whiteText: {
-        color: Color.DarkPurple,
+        color: Color.BlueText,
     },
 
     loading: {},

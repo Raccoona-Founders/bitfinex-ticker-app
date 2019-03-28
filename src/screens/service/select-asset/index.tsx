@@ -98,5 +98,3 @@ export default class SelectAssetScreen extends React.PureComponent<SelectAssetPr
         navigation.goBack();
     };
 }
-
-

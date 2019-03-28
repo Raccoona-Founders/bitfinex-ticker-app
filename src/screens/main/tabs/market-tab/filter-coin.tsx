@@ -78,11 +78,11 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         height: 34,
         borderRadius: 3,
-        backgroundColor: Color.GrayLight,
+        backgroundColor: Color.GrayWhite,
     },
 
     icon: {
         marginLeft: 5,
-        color: Color.PurpleNoactive,
+        color: Color.Gray3,
     },
 });

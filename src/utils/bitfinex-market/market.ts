@@ -1,12 +1,12 @@
 import { coinList } from 'utils/bitfinex-market/coin-list';
 
 
-const fiatsList = ['USD', 'EUR', 'GBP', 'JPY', 'CHN'];
+const fiatsList = ['USD', 'EUR', 'GBP', 'JPY', 'CHN', 'CHF'];
 
-export default class Market implements mobx.ticker.Market {
+export default class Market implements mobx.ticker.IMarket {
     protected _symbol: string;
-    protected _base: mobx.ticker.Coin;
-    protected _quote: mobx.ticker.Coin;
+    protected _base: mobx.ticker.TCoin;
+    protected _quote: mobx.ticker.TCoin;
 
     public constructor(symbol: string) {
         this._symbol = symbol;
@@ -40,7 +40,7 @@ export default class Market implements mobx.ticker.Market {
     }
 
     public isBaseFiat(): boolean {
-        return this._base.shortSymbol;
+        return fiatsList.indexOf(this._base.shortSymbol) >= 0;
     }
 
     public quoteAsset(): string {
@@ -52,6 +52,6 @@ export default class Market implements mobx.ticker.Market {
     }
 
     public isQuoteFiat(): boolean {
-        return this._quote.shortSymbol;
+        return fiatsList.indexOf(this._quote.shortSymbol) >= 0;
     }
 }

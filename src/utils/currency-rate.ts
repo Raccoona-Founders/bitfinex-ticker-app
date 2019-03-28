@@ -2,9 +2,9 @@ import Numeral from 'numeral';
 import { find } from 'lodash';
 
 export class UsdCalculator {
-    protected tickers: Record<string, mobx.ticker.Ticker>;
+    protected tickers: Record<string, mobx.ticker.TTicker>;
 
-    public constructor(tickers: Record<string, mobx.ticker.Ticker>) {
+    public constructor(tickers: Record<string, mobx.ticker.TTicker>) {
         this.tickers = tickers;
     }
 
