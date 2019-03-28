@@ -40,7 +40,11 @@
 		</dict>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Used for propose the best Bitcoin price in your region</string>
+	<string></string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Used to unlock your Private data</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Used to scan  QR Codes</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

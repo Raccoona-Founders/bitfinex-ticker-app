@@ -24,6 +24,8 @@
 	<string>9</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string></string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
@@ -38,7 +40,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>Used for unlock your Private Keys</string>
+	<string>Used for unlock your Private API Keys</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Used to scan QR codes</string>
 	<key>UILaunchStoryboardName</key>
