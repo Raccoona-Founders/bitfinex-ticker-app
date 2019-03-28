@@ -1,5 +1,5 @@
 import React from 'react';
-import { chain } from 'lodash';
+import { chain, orderBy } from 'lodash';
 import { inject, observer } from 'mobx-react/native';
 import {
     ScrollView,
@@ -92,18 +92,24 @@ export default class MarketTab extends React.Component<Props, State> {
 
 
     private __renderBody = () => {
+        const { Ticker } = this.props;
         const { tickerSymbols, renderCount } = this.state;
-        const tickers = this.props.Ticker.getTickers(tickerSymbols);
+        const trs = this.props.Ticker.getTickers(tickerSymbols);
+
+        const tickers = orderBy(trs, (t: mobx.ticker.TTicker) => t.volume * t.last_price, 'desc');
 
         return (
             <>
-                <MarketList
-                    tickers={tickers}
-                    renderCount={renderCount}
-                    lastUpdate={this.props.Ticker.lastUpdate}
+                <MarketList tickers={tickers}
+                            favoriteTickers={Ticker.favorite.getList()}
+                            renderCount={renderCount}
+                            lastUpdate={Ticker.lastUpdate}
+                            marketProvider={Ticker.getMarketProvider()}
                 />
 
-                {tickers.length > renderCount ? <ActivityIndicator size="small" /> : undefined}
+                {tickers.length > renderCount ? (
+                    <ActivityIndicator size="small" style={{ marginTop: 20 }} />
+                ) : undefined}
 
                 <SpanText style={{ color: Color.GrayBlues, fontSize: 12, padding: 20 }}>
                     {this.state.lastUpdate}
@@ -115,8 +121,8 @@ export default class MarketTab extends React.Component<Props, State> {
 
     private __getEnabledMarkets = (activeAsset: string): string[] => {
         return chain(this.props.Ticker.tickers)
-            .filter((market: mobx.ticker.Ticker) => market.symbol.endsWith(activeAsset))
-            .map((market: mobx.ticker.Ticker) => market.symbol)
+            .filter((market: mobx.ticker.TTicker) => market.symbol.endsWith(activeAsset))
+            .map((market: mobx.ticker.TTicker) => market.symbol)
             .value();
     };
 

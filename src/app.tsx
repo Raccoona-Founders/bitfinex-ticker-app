@@ -85,6 +85,6 @@ const styles = StyleSheet.create({
         paddingRight: 20,
     },
     loadingText: {
-        color: Color.Purple,
+        color: Color.BlueText,
     },
 });

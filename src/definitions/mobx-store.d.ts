@@ -10,7 +10,7 @@ declare global {
          * This model helps us to track Ticker list
          */
         namespace ticker {
-            interface Market {
+            interface IMarket {
                 symbol(): string;
 
                 baseAsset(): string;
@@ -26,13 +26,13 @@ declare global {
                 isQuoteFiat(): boolean;
             }
 
-            type Coin = {
+            type TCoin = {
                 shortSymbol: string;
                 symbol: string;
                 name: string;
             };
 
-            type Ticker = {
+            type TTicker = {
                 key: string;
                 symbol: string;
                 type: 'futures' | 'ticker';
@@ -48,24 +48,34 @@ declare global {
                 low: number;
             };
 
-            interface TickerModel {
-                tickers: Record<string, Ticker>;
-                favorite: FavoriteModel;
+
+            interface IMarketProvider {
+                getMarket(symbol: string): IMarket;
+            }
+
+
+            interface ITickerModel {
+                tickers: Record<string, TTicker>;
+                favorite: IFavoriteModel;
                 lastUpdate?: string;
                 usdCalculator: UsdCalculator;
 
                 fetchTickers(): Promise<void>;
 
-                getFavorite(): Ticker[];
+                getFavorite(): TTicker[];
 
-                getTicker(tickerSymbol: string): Ticker;
+                getMarket(symbol: string): IMarket;
 
-                getTickers(tickerSymbols?: string[]): Ticker[];
+                getMarketProvider(): IMarketProvider;
+
+                getTicker(tickerSymbol: string): TTicker;
+
+                getTickers(tickerSymbols?: string[]): TTicker[];
 
                 getMarketVolume(): Numeral;
             }
 
-            interface FavoriteModel {
+            interface IFavoriteModel {
                 exists(marketSymbol: string): boolean;
 
                 add(marketSymbol: string): void;
@@ -74,11 +84,11 @@ declare global {
 
                 getList(): string[];
 
-                setList(marketSymbols: string[]): void;
+                setList(marketSymbols?: string[]): void;
             }
 
             type WithTickerProps = {
-                Ticker: TickerModel,
+                Ticker: ITickerModel,
             };
         }
 

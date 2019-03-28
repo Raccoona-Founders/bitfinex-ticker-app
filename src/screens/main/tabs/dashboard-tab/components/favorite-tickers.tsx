@@ -7,20 +7,21 @@ import SpanText from 'components/span-text';
 import { Color, DefaultStyles } from 'styles/variables';
 import ChangePercent from 'components/change-percent';
 import CoinIcon from 'components/coin-icon';
-import RouteKeys from 'router/route-keys';
 import { renderPrice } from 'utils/helper';
+import { inject } from 'mobx-react/custom';
 
 
 const { width } = Dimensions.get('window');
 
 type FavoriteProps = {
-    tickers: mobx.ticker.Ticker[];
+    tickers: mobx.ticker.TTicker[];
     usdCalculator: UsdCalculator;
 };
 
 
 // @ts-ignore
 @withNavigation
+@inject('Ticker')
 export default class FavoriteTickers extends React.PureComponent<FavoriteProps> {
     public render(): JSX.Element {
         const { tickers } = this.props;
@@ -40,13 +41,14 @@ export default class FavoriteTickers extends React.PureComponent<FavoriteProps> 
 
 
     private __itemRenderer = () => {
-        const { usdCalculator } = this.props;
+        const { usdCalculator, Ticker } = this.props as FavoriteProps & mobx.ticker.WithTickerProps;
 
-        return (ticker: mobx.ticker.Ticker) => {
+        return (ticker: mobx.ticker.TTicker) => {
             const { last_price } = ticker;
 
             const usdPrice = usdCalculator.getUsdPrice(ticker.symbol);
             const volume = Numeral(ticker.volume).multiply(usdPrice.value());
+            const market = Ticker.getMarket(ticker.symbol);
 
             return (
                 <TouchableOpacity style={styles.box} key={ticker.symbol} onPress={this.__onPressTicker(ticker)}>
@@ -58,14 +60,14 @@ export default class FavoriteTickers extends React.PureComponent<FavoriteProps> 
                                   style={{ marginLeft: -8, marginRight: 2 }}
                         />
 
-                        <SpanText>{ticker.symbol}</SpanText>
+                        <SpanText style={styles.boxMarketName}>{market.baseAsset()}/{market.quoteAsset()}</SpanText>
                     </View>
 
                     <View style={styles.boxPrice}>
                         <SpanText style={styles.price}>
-                            {renderPrice(last_price)}
+                            {renderPrice(last_price)} {market.quoteAsset()}
                         </SpanText>
-                        <SpanText style={styles.priceUSD}>
+                        <SpanText style={styles.volume}>
                             Vol: ${Numeral(volume).format('0,0')}
                         </SpanText>
                     </View>
@@ -79,7 +81,7 @@ export default class FavoriteTickers extends React.PureComponent<FavoriteProps> 
     };
 
 
-    private __onPressTicker = (ticker: mobx.ticker.Ticker) => {
+    private __onPressTicker = (ticker: mobx.ticker.TTicker) => {
         return () => {
             const { navigation } = this.props as any as NavigationInjectedProps;
 
@@ -109,16 +111,24 @@ const styles = StyleSheet.create({
     box: {
         width: (width - 20 * 3) / 2,
         marginBottom: 20,
-        borderRadius: 5,
-        backgroundColor: Color.GrayLight,
+        borderRadius: 10,
         padding: 10,
+        paddingBottom: 15,
+        backgroundColor: Color.White,
+        shadowColor: "#1a1725",
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.08,
+        shadowRadius: 10,
+        elevation: 10,
     },
-
     boxHead: {
         flexDirection: 'row',
         alignItems: 'center',
     },
 
+    boxMarketName: {
+        ...DefaultStyles.boldFont
+    },
     boxPrice: {
         marginBottom: 10,
         marginTop: 10,
@@ -126,10 +136,9 @@ const styles = StyleSheet.create({
 
     price: {
         fontSize: 18,
-        ...DefaultStyles.mediumFont,
     },
-    priceUSD: {
-        fontSize: 14,
+    volume: {
+        fontSize: 12,
         color: Color.GrayBlues,
     },
 });

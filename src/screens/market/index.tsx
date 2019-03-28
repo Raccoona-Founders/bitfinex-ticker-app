@@ -97,7 +97,7 @@ export default class MarketScreen extends React.Component<MarketScreenProps, Sta
                 <View style={[marketStyle.section, marketStyle.sectionPrice]}>
                     <View>
                         <SpanText style={marketStyle.price}>
-                            {numFormat(tick.lastPrice || 0, currentMarket.format)} {quoteAsset.key}
+                            {numFormat(tick.last_price || 0, currentMarket.format)} {quoteAsset.key}
                         </SpanText>
 
                         <PriceChangeBox

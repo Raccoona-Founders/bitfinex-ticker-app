@@ -6,9 +6,11 @@ import MarketRow from 'components/market-row';
 import { compose } from 'recompose';
 
 type Props = {
-    tickers: mobx.ticker.Ticker[];
+    tickers: mobx.ticker.TTicker[];
+    marketProvider: mobx.ticker.IMarketProvider;
     renderCount?: number;
     lastUpdate?: string;
+    favoriteTickers: string[];
 };
 
 class MarketList extends React.PureComponent<Props & NavigationInjectedProps> {
@@ -22,10 +24,14 @@ class MarketList extends React.PureComponent<Props & NavigationInjectedProps> {
 
 
     private __marketRowRenderer = () => {
-        return (ticker: mobx.ticker.Ticker) => {
+        const { marketProvider, favoriteTickers } = this.props;
+
+        return (ticker: mobx.ticker.TTicker) => {
             return <MarketRow
                 key={ticker.symbol}
                 ticker={ticker}
+                isFavorite={favoriteTickers.indexOf(ticker.symbol) >= 0}
+                market={marketProvider.getMarket(ticker.symbol)}
                 onPress={this.__pressMarketRow(ticker.symbol)}
             />;
         };

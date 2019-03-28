@@ -137,7 +137,7 @@ export const sideRowStyles = StyleSheet.create({
     value: {
         ...DefaultStyles.mediumFont,
         fontSize: 14,
-        color: Color.DarkPurple,
+        color: Color.BlueText,
     },
 
     valueIndicator: {

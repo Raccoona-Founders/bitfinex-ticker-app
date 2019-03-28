@@ -2,31 +2,34 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { SpanText } from 'components/span-text';
 import CoinIcon from 'components/coin-icon';
-import { Color } from 'styles/variables';
+import { Color, DefaultStyles } from 'styles/variables';
 
 type MarketNameProps = {
-    ticker: mobx.ticker.Ticker;
+    ticker: mobx.ticker.TTicker;
+    market: mobx.ticker.IMarket;
 };
 
 export const MarketNameCell = (props: MarketNameProps) => {
-    const { ticker } = props;
+    const { market } = props;
 
     return (
         <View style={styles.container}>
             <CoinIcon size={45}
-                      asset={ticker.symbol.slice(1, 4)}
-                      style={{ marginRight: 20 }}
+                      asset={market.baseAsset()}
+                      style={styles.logoIcon}
                       withShadow={false}
             />
 
             <View>
                 <View style={styles.marketRow}>
                     <SpanText style={[styles.pairBoxText, styles.pairBoxBase]}>
-                        {ticker.symbol}
+                        {market.baseAsset()}/{market.quoteAsset()}
                     </SpanText>
                 </View>
                 <View style={styles.baseAssetName}>
-                    <SpanText style={styles.baseAssetNameText}>{ticker.symbol}</SpanText>
+                    <SpanText style={styles.baseAssetNameText}>
+                        {market.baseName()} to {market.quoteName()}
+                    </SpanText>
                 </View>
             </View>
         </View>
@@ -45,8 +48,11 @@ const styles = StyleSheet.create({
     },
 
     pairBoxText: {
-        color: Color.DarkPurple,
         fontSize: 18,
+    },
+    logoIcon: {
+        marginLeft: 10,
+        marginRight: 10,
     },
     pairBoxBase: {},
     pairBoxSeparator: {
@@ -62,9 +68,11 @@ const styles = StyleSheet.create({
         textAlignVertical: 'bottom',
     },
     baseAssetName: {
-        marginTop: 3,
+        marginTop: 2,
     },
     baseAssetNameText: {
+        fontSize: 12,
+        ...DefaultStyles.boldFont,
         color: Color.GrayBlues,
     },
 });
