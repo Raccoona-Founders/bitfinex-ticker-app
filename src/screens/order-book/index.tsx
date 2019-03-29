@@ -8,7 +8,7 @@ import { KunaMarket, kunaMarketMap } from 'kuna-sdk';
 import AnalTracker from 'utils/ga-tracker';
 import kunaClient from 'utils/kuna-api';
 import getPrecisionMap from 'utils/presicion-map';
-import { _ } from 'utils/i18n';
+import { __ } from 'utils/i18n';
 import OrderBookProcessor from 'utils/order-book-processor';
 import { SpanText } from 'components/span-text';
 import { ShadeScrollCard } from 'components/shade-navigator';
@@ -88,7 +88,7 @@ export default class OrderBookScreen extends React.Component<DepthScreenProps, S
             <ShadeScrollCard renderFooter={this.__renderOrderBookFooter}>
                 <View style={styles.container}>
                     <View style={styles.topic}>
-                        <SpanText style={styles.topicText}>{_('market.order-book')}</SpanText>
+                        <SpanText style={styles.topicText}>{__('Order Book')}</SpanText>
                         <SpanText style={[styles.topicText, styles.topicTextMarket]}>
                             {kunaMarket.baseAsset} / {kunaMarket.quoteAsset}
                         </SpanText>
@@ -115,13 +115,13 @@ export default class OrderBookScreen extends React.Component<DepthScreenProps, S
 
                 <View style={styles.depthHeader}>
                     <SpanText style={styles.depthHeaderCell}>
-                        {_('market.amount-asset', { asset: kunaMarket.baseAsset })}
+                        {__('Amount ({{asset}})', { asset: kunaMarket.baseAsset })}
                     </SpanText>
                     <SpanText style={styles.depthHeaderCell}>
-                        {_('market.price-asset', { asset: kunaMarket.quoteAsset })}
+                        {__('Price ({{asset}})', { asset: kunaMarket.quoteAsset })}
                     </SpanText>
                     <SpanText style={styles.depthHeaderCell}>
-                        {_('market.amount-asset', { asset: kunaMarket.baseAsset })}
+                        {__('Amount ({{asset}})', { asset: kunaMarket.baseAsset })}
                     </SpanText>
                 </View>
 
@@ -150,7 +150,7 @@ export default class OrderBookScreen extends React.Component<DepthScreenProps, S
             <>
                 <View style={styles.spreadContainer}>
                     <InfoUnit
-                        topic={_('order-book.spread')}
+                        topic={__('Spread')}
                         value={<>
                             <SpanText style={styles.spreadValue}>
                                 {numeral(spread.value).format('0,0.[00000000]')} {kunaMarket.quoteAsset}
@@ -176,13 +176,13 @@ export default class OrderBookScreen extends React.Component<DepthScreenProps, S
 
         return (
             <View style={styles.groupingContainer}>
-                <SpanText>{_('order-book.grouping')}</SpanText>
+                <SpanText>{__('Grouping')}</SpanText>
 
                 <View style={styles.groupingButtonContainer}>
                     <SpanText style={styles.groupingValue}>
                         {precision > 0
                             ? numeral(precision).format('0,0.[000000]')
-                            : _('order-book.none')}
+                            : __('None')}
                     </SpanText>
 
                     <TouchableOpacity onPress={this.__downPrecision} style={styles.groupingButton}>

@@ -7,7 +7,7 @@ import { NavigationInjectedProps } from 'react-navigation';
 import { getAsset, KunaAssetUnit, kunaMarketMap, KunaOrderBook } from 'kuna-sdk';
 import RouteKeys from 'router/route-keys';
 import AnalTracker from 'utils/ga-tracker';
-import { _ } from 'utils/i18n';
+import { __ } from 'utils/i18n';
 import { numFormat } from 'utils/number-helper';
 import CoinIcon from 'components/coin-icon';
 import SpanText from 'components/span-text';
@@ -139,7 +139,7 @@ export default class MarketScreen extends React.Component<MarketScreenProps, Sta
                         market={currentMarket}
                         min={tick.low}
                         max={tick.high}
-                        price={tick.lastPrice || 0}
+                        price={tick.last_price || 0}
                     />
 
 
@@ -187,7 +187,7 @@ export default class MarketScreen extends React.Component<MarketScreenProps, Sta
                     <UIIconButton
                         icon="book"
                         onPress={this.__openDepth}
-                        title={_('market.order-book')}
+                        title={__('Order Book')}
                     />
                 </View>
 
@@ -195,7 +195,7 @@ export default class MarketScreen extends React.Component<MarketScreenProps, Sta
                     <UIIconButton
                         icon="calculator"
                         onPress={this.__openCalculator}
-                        title={_('market.calculate')}
+                        title={__('Calculate')}
                     />
                 </View>
 
@@ -203,7 +203,7 @@ export default class MarketScreen extends React.Component<MarketScreenProps, Sta
                     <UIIconButton
                         icon="exchange-alt"
                         onPress={this.__openLastTrades}
-                        title={_('market.last-trades')}
+                        title={__('Last Trades')}
                         disabled={true}
                     />
                 </View>

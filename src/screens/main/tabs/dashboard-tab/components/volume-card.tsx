@@ -1,6 +1,7 @@
 import React from 'react';
 import Numeral from 'numeral';
 import { StyleSheet, View } from 'react-native';
+import { __ } from 'utils/i18n';
 import { Color, DefaultStyles } from 'styles/variables';
 import SpanText from 'components/span-text';
 
@@ -17,7 +18,7 @@ export default class VolumeCard extends React.Component<Props> {
         return (
             <View style={styles.box}>
 
-                <SpanText style={styles.title}>24H Volume</SpanText>
+                <SpanText style={styles.title}>{__('24H Volume')}</SpanText>
                 <SpanText style={styles.volumeUSD}>
                     ${Numeral(volumeUSD).format('0,0')}
                 </SpanText>

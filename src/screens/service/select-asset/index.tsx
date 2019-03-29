@@ -2,7 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { NavigationScreenProps } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { _ } from 'utils/i18n';
+import { __ } from 'utils/i18n';
 import { ShadeScrollCard } from 'components/shade-navigator';
 import Topic from 'components/topic';
 import SpanText from 'components/span-text';
@@ -30,7 +30,7 @@ export default class SelectAssetScreen extends React.PureComponent<SelectAssetPr
 
         const emptyAsset = navigation.getParam('emptyAsset') || false;
 
-        const title = navigation.getParam('title') || _('choose-coin.title');
+        const title = navigation.getParam('title') || __('Choose coin');
         const description = navigation.getParam('description') || undefined;
 
         const rowRenderer = this.__generateRowRenderer(assets.length);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { _ } from 'utils/i18n';
+import { __ } from 'utils/i18n';
 import Tag from 'components/tag';
 import { Color } from 'styles/variables';
 
@@ -12,7 +12,7 @@ type SideProps = {
 export default (props: SideProps) => {
     return (
         <Tag style={props.side === 'buy' ? styles.sideBuy : styles.sideSell} styleText={styles.sideText}>
-            {props.side === 'buy' ? _('kuna-code.buy') : _('kuna-code.sell')}
+            {props.side === 'buy' ? __('Buy') : __('Sell')}
         </Tag>
     );
 };

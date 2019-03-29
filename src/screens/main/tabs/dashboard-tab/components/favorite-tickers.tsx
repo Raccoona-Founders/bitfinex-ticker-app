@@ -1,14 +1,15 @@
 import React from 'react';
 import Numeral from 'numeral';
 import { View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { inject } from 'mobx-react/custom';
 import { NavigationInjectedProps, withNavigation } from 'react-navigation';
+import { __ } from 'utils/i18n';
+import { renderPrice } from 'utils/helper';
 import { UsdCalculator } from 'utils/currency-rate';
 import SpanText from 'components/span-text';
-import { Color, DefaultStyles } from 'styles/variables';
 import ChangePercent from 'components/change-percent';
 import CoinIcon from 'components/coin-icon';
-import { renderPrice } from 'utils/helper';
-import { inject } from 'mobx-react/custom';
+import { Color, DefaultStyles } from 'styles/variables';
 
 
 const { width } = Dimensions.get('window');
@@ -32,8 +33,7 @@ export default class FavoriteTickers extends React.PureComponent<FavoriteProps> 
 
         return (
             <View style={styles.container}>
-                <SpanText style={styles.title}>Favorites</SpanText>
-
+                <SpanText style={styles.title}>{__('Favorites')}</SpanText>
                 {tickers.map(this.__itemRenderer())}
             </View>
         );
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     },
 
     boxMarketName: {
-        ...DefaultStyles.boldFont
+        ...DefaultStyles.boldFont,
     },
     boxPrice: {
         marginBottom: 10,

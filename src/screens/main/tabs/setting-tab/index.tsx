@@ -4,7 +4,7 @@ import { inject } from 'mobx-react/native';
 import Rate, { AndroidMarket } from 'react-native-rate';
 import { withNavigation, NavigationInjectedProps } from 'react-navigation';
 import AnalTracker from 'utils/ga-tracker';
-import { _ } from 'utils/i18n';
+import { __ } from 'utils/i18n';
 import { SpanText } from 'components/span-text';
 import RouteKeys from 'router/route-keys';
 import { Color } from 'styles/variables';
@@ -36,15 +36,15 @@ export default class SettingTab extends React.Component<SettingsProps> {
         return (
             <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
                 <View style={styles.preContent}>
-                    <SpanText style={{ fontWeight: 'bold', fontSize: 32 }}>Settings</SpanText>
+                    <SpanText style={{ fontWeight: 'bold', fontSize: 32 }}>{__('Settings')}</SpanText>
                     <SpanText style={styles.userId}>User ID: {User.userId}</SpanText>
                 </View>
                 <View style={styles.menuBox}>
-                    <MenuLink title={_('setting.menu.about')}
+                    <MenuLink title={__('About application')}
                               route={RouteKeys.Setting_About}
                     />
 
-                    <MenuLink title={_('setting.menu.rate-app')}
+                    <MenuLink title={__('Rate Bitfinex Ticker')}
                               isLoading={rateLoading}
                               onPress={this.__rateApplication}
                     />

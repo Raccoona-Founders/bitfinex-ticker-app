@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Numeral from 'numeral';
 import { KunaMarket } from 'kuna-sdk';
-import { _ } from 'utils/i18n';
+import { __ } from 'utils/i18n';
 import OrderBookProcessor from 'utils/order-book-processor';
 import SpanText from 'components/span-text';
 import { Color } from 'styles/variables';
@@ -23,7 +23,7 @@ export default class ResistanceChart extends React.PureComponent<ResistanceChart
         return (
             <View style={styles.box}>
                 <SpanText style={styles.title}>
-                    {_('order-book.resistance.title')}
+                    {__('10% price resistance')}
                 </SpanText>
                 <View style={styles.chart}>
                     <View style={[styles.indicator, styles.indicatorAsk, { width: `${percent * 100}%` }]} />
@@ -32,11 +32,11 @@ export default class ResistanceChart extends React.PureComponent<ResistanceChart
 
                 <View style={styles.rangeContainer}>
                     <SpanText style={[styles.rangeValue, styles.rangeValueBuy]}>
-                        {_('general.ask')}: {Numeral(buy[0]).format('0,0.[00]')} {market.baseAsset}
+                        {__('Ask')}: {Numeral(buy[0]).format('0,0.[00]')} {market.baseAsset}
                     </SpanText>
 
                     <SpanText style={[styles.rangeValue, styles.rangeValueSell]}>
-                        {_('general.bid')}: {Numeral(sell[0]).format('0,0.[00]')} {market.baseAsset}
+                        {__('Bid')}: {Numeral(sell[0]).format('0,0.[00]')} {market.baseAsset}
                     </SpanText>
                 </View>
             </View>

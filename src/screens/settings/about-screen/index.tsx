@@ -3,7 +3,7 @@ import { View, Linking, TouchableOpacity } from 'react-native';
 import { SpanText } from 'components/span-text';
 import { ShadeScrollCard } from 'components/shade-navigator';
 import Analytics from 'utils/ga-tracker';
-import i18n, { _ } from 'utils/i18n';
+import i18n, { __ } from 'utils/i18n';
 import Topic from 'components/topic';
 import MDMessage from 'components/md-message';
 import { styles } from './about-screen.style';
@@ -23,20 +23,20 @@ type SettingsProps = mobx.user.WithUserProps;
 
 
 const links: LinkItem[] = [{
-    title: _('about.github'),
+    title: __('Github'),
     label: 'Raccoona-Crypto/bitfinex-ticker-app',
     url: 'https://github.com/Raccoona-Crypto/bitfinex-ticker-app',
 }, {
-    title: _('about.website'),
+    title: __('Website'),
     label: 'coinwizard.github.io/kuna-ticker-app',
     url: 'https://coinwizard.github.io/kuna-ticker-app?ref=application',
     disabled: true,
 }, {
-    title: _('about.telegram'),
+    title: __('Telegram'),
     label: '@MaksymTymchyk',
     url: 'https://t.me/MaksymTymchyk',
 }, {
-    title: _('about.email'),
+    title: __('Email'),
     label: 'maksym.tymchyk@gmail.com',
     url: `mailto:maksym.tymchyk@gmail.com?${qs.stringify({ subject: 'Bitfinex Ticker' })}`,
 }];
@@ -46,7 +46,7 @@ export default class AboutScreen extends React.Component<SettingsProps> {
     public render(): JSX.Element {
         return (
             <ShadeScrollCard>
-                <Topic title={_('about.title')} />
+                <Topic title={__('About Bitfinex Ticker')} />
 
                 <View style={styles.body}>
                     <MDMessage content={textContent[language] || textContent.en} />

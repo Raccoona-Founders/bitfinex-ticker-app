@@ -1,6 +1,6 @@
 import React from 'react';
 import numeral from 'numeral';
-import { _ } from 'utils/i18n';
+import { __ } from 'utils/i18n';
 import Tag from 'components/tag';
 import { Color } from 'styles/variables';
 
@@ -15,9 +15,9 @@ export default (props: CommissionProps): JSX.Element => {
         );
     }
 
-    let textTemplate = _('kuna-code.you-pay');
+    let textTemplate = __('You pay');
     if (props.commission < 0) {
-        textTemplate = _('kuna-code.maker-pay');
+        textTemplate = __('Maker pay');
     }
 
     const comm = numeral(Math.abs(props.commission));

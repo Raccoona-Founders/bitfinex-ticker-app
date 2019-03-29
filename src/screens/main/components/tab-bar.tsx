@@ -3,7 +3,7 @@ import { Animated, Dimensions, StyleProp, TouchableOpacity, View, ViewStyle } fr
 import { KunaAssetUnit } from 'kuna-sdk';
 import * as SlideView from 'components/slide-view';
 import { tabBarStyles } from '../styles';
-import { _ } from 'utils/i18n';
+import { __ } from 'utils/i18n';
 import Tabs from '../tabs';
 import SpanText from 'components/span-text';
 
@@ -27,17 +27,17 @@ export type TabnavRoute = {
 export const tabNavigationRoutes: TabnavRoute[] = [
     {
         key: 'Dashboard',
-        title: _('menu.dashboard'),
+        title: __('Dashboard'),
         index: 0,
         sceneComponent: Tabs.DashboardTab,
     }, {
         key: 'Markets',
-        title: _('menu.markets'),
+        title: __('Markets'),
         index: 1,
         sceneComponent: Tabs.MarketTab,
     },{
-        key: 'Settings',
-        title: _('menu.setting'),
+        key: 'Setting',
+        title: __('Setting'),
         index: 2,
         sceneComponent: Tabs.SettingTab,
     },

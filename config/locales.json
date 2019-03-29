@@ -1,0 +1,17 @@
+{
+    "en-us": {
+        "name": "English",
+        "code": "en-us",
+        "shortCode": "en"
+    },
+    "uk-ua": {
+        "name": "Ukrainian",
+        "code": "uk-ua",
+        "shortCode": "ua"
+    },
+    "ru-ru": {
+        "name": "Russian",
+        "code": "ru-ru",
+        "shortCode": "ru"
+    }
+}

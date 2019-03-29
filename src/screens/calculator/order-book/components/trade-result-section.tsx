@@ -2,7 +2,7 @@ import React from 'react';
 import numeral from 'numeral';
 import { getAsset, KunaMarket, KunaV3Ticker } from 'kuna-sdk';
 import { View, StyleSheet } from 'react-native';
-import { _ } from 'utils/i18n';
+import { __ } from 'utils/i18n';
 import SpanText from 'components/span-text';
 import { Color, DefaultStyles } from 'styles/variables';
 import { OperationMode } from '../../common';
@@ -20,7 +20,7 @@ type ProcessResultProps = {
 
 export default class ProcessResultSection extends React.PureComponent<ProcessResultProps> {
     public render(): JSX.Element {
-        const {market, ticker, baseValue, quoteValue, mode} = this.props;
+        const { market, ticker, baseValue, quoteValue, mode } = this.props;
 
         const avrPrice = numeral(quoteValue).divide(baseValue);
 
@@ -35,7 +35,7 @@ export default class ProcessResultSection extends React.PureComponent<ProcessRes
                 />
 
                 <View style={styles.avgPrice}>
-                    <SpanText style={styles.avgPriceLabel}>{_('calculator.average-price')}</SpanText>
+                    <SpanText style={styles.avgPriceLabel}>{__('Average Price')}</SpanText>
                     <SpanText style={styles.avgPriceValue}>
                         {avrPrice.format(market.format)} {market.quoteAsset}
                     </SpanText>
@@ -45,7 +45,7 @@ export default class ProcessResultSection extends React.PureComponent<ProcessRes
                     <SpanText style={styles.avgPriceDiffText}>
                         {diffPrice.format('+' + market.format)} {market.quoteAsset}
                     </SpanText>
-                    <View style={styles.avgPriceDiffSeparator}/>
+                    <View style={styles.avgPriceDiffSeparator} />
                     <SpanText style={styles.avgPriceDiffText}>
                         {diffPrice.divide(ticker.lastPrice).format('+0,0.0[0]%')}
                     </SpanText>
