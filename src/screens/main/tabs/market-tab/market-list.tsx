@@ -40,7 +40,7 @@ class MarketList extends React.PureComponent<Props & NavigationInjectedProps> {
 
     private __pressMarketRow = (market: string) => {
         return () => {
-            // this.props.navigation.navigate('Market', { symbol: market });
+            this.props.navigation.navigate('Market', { symbol: market });
         };
     };
 }

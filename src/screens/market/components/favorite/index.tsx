@@ -1,13 +1,12 @@
 import React from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import { KunaMarket } from 'kuna-sdk';
+import { TouchableOpacity } from 'react-native';
 import { compose } from 'recompose';
 import { inject, observer } from 'mobx-react/native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { Color } from 'styles/variables';
 
 type FavoriteOuterProps = {
-    market: KunaMarket;
+    market: mobx.ticker.IMarket;
 };
 
 type FavoriteProps
@@ -21,7 +20,7 @@ class Favorite extends React.Component<FavoriteProps> {
         return (
             <TouchableOpacity onPress={this.__pressFavorite}>
                 <Icon name="star"
-                      style={{ color: Ticker.favorite.exists(market.key) ? Color.Main : Color.GrayNoactive }}
+                      style={{ color: Ticker.favorite.exists(market.symbol()) ? Color.Main : Color.GrayNoactive }}
                       size={24}
                       solid
                 />
@@ -33,7 +32,7 @@ class Favorite extends React.Component<FavoriteProps> {
         const { market, Ticker } = this.props;
         const fv = Ticker.favorite;
 
-        fv.exists(market.key) ? fv.remove(market.key) : fv.add(market.key);
+        fv.exists(market.symbol()) ? fv.remove(market.symbol()) : fv.add(market.symbol());
     };
 }
 

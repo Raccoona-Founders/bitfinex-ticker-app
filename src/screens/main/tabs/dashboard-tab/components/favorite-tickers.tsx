@@ -10,6 +10,7 @@ import SpanText from 'components/span-text';
 import ChangePercent from 'components/change-percent';
 import CoinIcon from 'components/coin-icon';
 import { Color, DefaultStyles } from 'styles/variables';
+import RouteKeys from 'router/route-keys';
 
 
 const { width } = Dimensions.get('window');
@@ -85,7 +86,7 @@ export default class FavoriteTickers extends React.PureComponent<FavoriteProps> 
         return () => {
             const { navigation } = this.props as any as NavigationInjectedProps;
 
-            // navigation.push(RouteKeys.Market, { symbol: market.key });
+            navigation.push(RouteKeys.Market, { symbol: ticker.symbol });
         };
     };
 }

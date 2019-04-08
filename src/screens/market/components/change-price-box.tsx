@@ -22,7 +22,7 @@ const PriceChangeBox = (props: PriceChangeBoxProps) => {
 
     return (
         <View style={[priceChangeBoxStyle, props.style]}>
-            <SpanText style={priceChangeStyles}>{numeral(props.value).format('+0,0.00')}%</SpanText>
+            <SpanText style={priceChangeStyles}>{numeral(props.value).format('+0,0.00%')}</SpanText>
         </View>
     );
 
