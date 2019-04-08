@@ -7,15 +7,15 @@ export default {
 
     ...Platform.select({
         ios: {
-            ADMOB_APP_ID: 'ca-app-pub-4733255242870112~7529604809',
+            ADMOB_APP_ID: 'ca-app-pub-4733255242870112~3255531494',
             ADMOB_BANNERS: {
-                test: 'ca-app-pub-4733255242870112/4276558726',
+                dashboard: 'ca-app-pub-4733255242870112/1559306444',
             },
         },
         android: {
             ADMOB_APP_ID: 'ca-app-pub-4733255242870112~7307859203',
             ADMOB_BANNERS: {
-                test: 'ca-app-pub-4733255242870112/9167735782',
+                dashboard: 'ca-app-pub-4733255242870112/9167735782',
             },
         },
     }),

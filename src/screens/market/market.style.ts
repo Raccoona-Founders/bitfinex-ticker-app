@@ -48,6 +48,7 @@ const marketStyle = StyleSheet.create({
     sectionPrice: {
         paddingLeft: 20,
         paddingRight: 20,
+        marginBottom: 20,
     },
 
     price: {

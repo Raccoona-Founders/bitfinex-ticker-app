@@ -3,11 +3,10 @@ import Numeral from 'numeral';
 import { StyleSheet, View } from 'react-native';
 import SpanText from 'components/span-text';
 import { Color } from 'styles/variables';
-import { KunaMarket } from 'kuna-sdk';
 
 
 type MinMaxIndicatorProps = {
-    market: KunaMarket;
+    market: mobx.ticker.IMarket;
     min: number;
     max: number;
     price: number;
@@ -15,7 +14,7 @@ type MinMaxIndicatorProps = {
 
 export default class MinMaxIndicator extends React.PureComponent<MinMaxIndicatorProps> {
     public render(): JSX.Element {
-        const { min, max, price, market } = this.props;
+        const { min, max, price } = this.props;
 
         const pricePercent = (price - min) / (max - min);
 
@@ -27,11 +26,11 @@ export default class MinMaxIndicator extends React.PureComponent<MinMaxIndicator
 
                 <View style={styles.rangeContainer}>
                     <SpanText style={[styles.rangeValue, styles.rangeValueLow]}>
-                        Low: {Numeral(min).format(market.format)}
+                        Low: {Numeral(min).format('0.0.00[000000]')}
                     </SpanText>
 
                     <SpanText style={[styles.rangeValue, styles.rangeValueHigh]}>
-                        High: {Numeral(max).format(market.format)}
+                        High: {Numeral(max).format('0.0.00[000000]')}
                     </SpanText>
                 </View>
             </View>

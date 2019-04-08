@@ -2,11 +2,10 @@ import React from 'react';
 import { inject, observer } from 'mobx-react/native';
 import { ScrollView, RefreshControl, StyleSheet, View } from 'react-native';
 import AnalTracker from 'utils/ga-tracker';
-import { Color } from 'styles/variables';
-
+import Constants from 'utils/constants';
+import AdvBanner from 'components/adv-banner';
 import VolumeCard from './components/volume-card';
 import FavoriteTickers from './components/favorite-tickers';
-import Constants from 'utils/constants';
 
 
 type State = {
@@ -38,23 +37,26 @@ export default class MarketTab extends React.Component<Props, State> {
         const usdToBtc = Ticker.usdCalculator.getBtcPrice('fBTCUSD');
 
         return (
-            <ScrollView
-                style={styles.flatList}
-                showsVerticalScrollIndicator={false}
-                refreshControl={this.__renderRefreshControl()}
-            >
-                <VolumeCard
-                    volumeUSD={volumeUSD.value()}
-                    volumeBTC={volumeUSD.multiply(usdToBtc).value()}
-                />
+            <View style={{ justifyContent: 'space-between', flex: 1 }}>
+                <ScrollView
+                    style={styles.flatList}
+                    showsVerticalScrollIndicator={false}
+                    refreshControl={this.__renderRefreshControl()}
+                >
+                    <VolumeCard
+                        volumeUSD={volumeUSD.value()}
+                        volumeBTC={volumeUSD.multiply(usdToBtc).value()}
+                    />
 
-                <FavoriteTickers
-                    tickers={Ticker.getFavorite()}
-                    usdCalculator={Ticker.usdCalculator}
-                />
+                    <FavoriteTickers
+                        tickers={Ticker.getFavorite()}
+                        usdCalculator={Ticker.usdCalculator}
+                    />
+                </ScrollView>
 
+                <AdvBanner showBanner={true} />
                 <View style={{ height: Constants.IS_IPHONE_X ? 90 : 60 }} />
-            </ScrollView>
+            </View>
         );
     }
 
