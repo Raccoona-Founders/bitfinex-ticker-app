@@ -7,6 +7,7 @@ import UIIconButton from 'components/ui-icon-button';
 import { ShadeScrollCard } from 'components/shade-navigator';
 import marketStyle from './market.style';
 import MarketBody from 'screens/market/market.body';
+import RouteKeys from 'router/route-keys';
 
 
 type MarketScreenOuterProps = NavigationInjectedProps<{ symbol: string; }>;
@@ -40,9 +41,9 @@ export default class MarketScreen extends React.Component<MarketScreenProps> {
 
 
     protected __openDepth = () => {
-        // this.props.navigation.push(RouteKeys.Market_OrderBook, {
-        //     marketSymbol: this._currentSymbol,
-        // });
+        this.props.navigation.push(RouteKeys.Market_OrderBook, {
+            marketSymbol: this._currentSymbol,
+        });
     };
 
 

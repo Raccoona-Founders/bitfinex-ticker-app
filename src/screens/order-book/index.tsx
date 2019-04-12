@@ -1,29 +1,26 @@
 import React from 'react';
 import { View, ActivityIndicator, TouchableOpacity } from 'react-native';
-import numeral from 'numeral';
 import { compose } from 'recompose';
 import { inject, observer } from 'mobx-react/native';
 import { NavigationInjectedProps } from 'react-navigation';
-import { KunaMarket, kunaMarketMap } from 'kuna-sdk';
-import AnalTracker from 'utils/ga-tracker';
-import kunaClient from 'utils/kuna-api';
-import getPrecisionMap from 'utils/presicion-map';
 import { __ } from 'utils/i18n';
+import AnalTracker from 'utils/ga-tracker';
+import { BitfinexClient } from 'utils/bitfinex';
 import OrderBookProcessor from 'utils/order-book-processor';
 import { SpanText } from 'components/span-text';
 import { ShadeScrollCard } from 'components/shade-navigator';
-import InfoUnit from 'components/info-unit';
+import ResistanceChart from './components/resistance-chart';
 import styles from './depth.style';
 import SideRows from './side-rows';
-import ResistanceChart from './components/resistance-chart';
 
-
-const ORDER_DEPTH = 30;
+const MIN_PRECISION = 0;
+const MAX_PRECISION = 4;
+const ORDER_DEPTH = 25;
 
 type State = {
     orderBook?: OrderBookProcessor;
+    error?: string;
     precisionIndex: number;
-    precisionMap: number[];
 };
 
 type DepthScreenOuterProps
@@ -41,48 +38,31 @@ type DepthScreenProps
 export default class OrderBookScreen extends React.Component<DepthScreenProps, State> {
     public state: State = {
         orderBook: undefined,
+        error: undefined,
         precisionIndex: 0,
-        precisionMap: [],
     };
 
-    public constructor(props: DepthScreenProps) {
-        super(props);
-
-        const marketSymbol = this.props.navigation.getParam('marketSymbol');
-        const kunaMarket = kunaMarketMap[marketSymbol];
-
-        this.state.precisionMap = getPrecisionMap(marketSymbol, kunaMarket.quoteAsset);
-    }
-
-
     public get precision(): number {
-        const { precisionMap, precisionIndex } = this.state;
-
-        return precisionMap[precisionIndex - 1] || 0;
+        return this.state.precisionIndex;
     }
 
 
     public async componentDidMount(): Promise<void> {
         const marketSymbol = this.props.navigation.getParam('marketSymbol');
 
-        AnalTracker.logEvent('open_orderbook', {
+        AnalTracker.logEvent('OrderBook_Open', {
             market: marketSymbol,
         });
 
-        setTimeout(async () => {
-            const orderBook = await kunaClient.getOrderBook(marketSymbol);
-
-            this.setState({
-                orderBook: new OrderBookProcessor(orderBook, ORDER_DEPTH),
-            });
-        }, 600);
+        setTimeout(this.__loadOrderBook, 600);
     }
 
 
     public render(): JSX.Element {
-        const { orderBook } = this.state;
+        const { Ticker } = this.props;
+        const { orderBook, error } = this.state;
         const marketSymbol = this.props.navigation.getParam('marketSymbol');
-        const kunaMarket = kunaMarketMap[marketSymbol];
+        const market = Ticker.getMarket(marketSymbol);
 
         return (
             <ShadeScrollCard renderFooter={this.__renderOrderBookFooter}>
@@ -90,51 +70,73 @@ export default class OrderBookScreen extends React.Component<DepthScreenProps, S
                     <View style={styles.topic}>
                         <SpanText style={styles.topicText}>{__('Order Book')}</SpanText>
                         <SpanText style={[styles.topicText, styles.topicTextMarket]}>
-                            {kunaMarket.baseAsset} / {kunaMarket.quoteAsset}
+                            {market.baseAsset()} / {market.quoteAsset()}
                         </SpanText>
                     </View>
 
                     {orderBook ? (
                         <View style={styles.depthSheetContainer}>
-                            {this.__renderDepthSheet(kunaMarket, orderBook)}
+                            {this.__renderDepthSheet(market, orderBook)}
                         </View>
-                    ) : <ActivityIndicator />}
+                    ) : (
+                        error ? <SpanText>{error}</SpanText> : <ActivityIndicator />
+                    )}
                 </View>
             </ShadeScrollCard>
         );
     }
 
 
-    private __renderDepthSheet(kunaMarket: KunaMarket, orderBook: OrderBookProcessor): JSX.Element {
-        const precision = this.precision;
-        const precisionOrderBook = orderBook.convertToPrecision(precision);
+    private __loadOrderBook = async () => {
+        const marketSymbol = this.props.navigation.getParam('marketSymbol');
 
+        try {
+            const orderBook = await BitfinexClient.book(
+                marketSymbol,
+                `P${this.precision}`,
+                ORDER_DEPTH,
+            );
+
+            this.setState({
+                orderBook: new OrderBookProcessor(orderBook, ORDER_DEPTH),
+                error: undefined,
+            });
+        } catch (error) {
+            this.setState({
+                orderBook: undefined,
+                error: 'Something wrong on load Order Book. Try latest.',
+            });
+        }
+    };
+
+
+    private __renderDepthSheet(market: mobx.ticker.IMarket, orderBook: OrderBookProcessor): JSX.Element {
         return (
             <View style={styles.depthSheet}>
-                {this.__renderPreSheet(kunaMarket, orderBook)}
+                {this.__renderPreSheet(market, orderBook)}
 
                 <View style={styles.depthHeader}>
                     <SpanText style={styles.depthHeaderCell}>
-                        {__('Amount ({{asset}})', { asset: kunaMarket.baseAsset })}
+                        {__('Amount ({{asset}})', { asset: market.baseAsset() })}
                     </SpanText>
                     <SpanText style={styles.depthHeaderCell}>
-                        {__('Price ({{asset}})', { asset: kunaMarket.quoteAsset })}
+                        {__('Price ({{asset}})', { asset: market.quoteAsset() })}
                     </SpanText>
                     <SpanText style={styles.depthHeaderCell}>
-                        {__('Amount ({{asset}})', { asset: kunaMarket.baseAsset })}
+                        {__('Amount ({{asset}})', { asset: market.baseAsset() })}
                     </SpanText>
                 </View>
 
                 <View style={styles.depthSheetBody}>
-                    <SideRows side="bid"
-                              orderBook={precisionOrderBook}
-                              market={kunaMarket}
+                    <SideRows side="ask"
+                              orderBook={orderBook}
+                              market={market}
                               style={styles.depthSheetSide}
                     />
 
-                    <SideRows side="ask"
-                              orderBook={precisionOrderBook}
-                              market={kunaMarket}
+                    <SideRows side="bid"
+                              orderBook={orderBook}
+                              market={market}
                               style={styles.depthSheetSide}
                     />
                 </View>
@@ -142,32 +144,12 @@ export default class OrderBookScreen extends React.Component<DepthScreenProps, S
         );
     }
 
-    private __renderPreSheet(kunaMarket: KunaMarket, orderBook: OrderBookProcessor): JSX.Element {
-
-        const spread = orderBook.getSpread();
-
+    private __renderPreSheet(market: mobx.ticker.IMarket, orderBook: OrderBookProcessor): JSX.Element {
         return (
-            <>
-                <View style={styles.spreadContainer}>
-                    <InfoUnit
-                        topic={__('Spread')}
-                        value={<>
-                            <SpanText style={styles.spreadValue}>
-                                {numeral(spread.value).format('0,0.[00000000]')} {kunaMarket.quoteAsset}
-                            </SpanText>
-                            <SpanText style={styles.spreadPercentage}>
-                                ({numeral(spread.percentage).format('0,0.00')}%)
-                            </SpanText>
-                        </>}
-                        valueStyle={styles.spreadValueBox}
-                    />
-                </View>
-
-                <ResistanceChart
-                    market={kunaMarket}
-                    orderBook={orderBook}
-                />
-            </>
+            <ResistanceChart
+                market={market}
+                orderBook={orderBook}
+            />
         );
     }
 
@@ -181,14 +163,21 @@ export default class OrderBookScreen extends React.Component<DepthScreenProps, S
                 <View style={styles.groupingButtonContainer}>
                     <SpanText style={styles.groupingValue}>
                         {precision > 0
-                            ? numeral(precision).format('0,0.[000000]')
+                            ? `P${precision}`
                             : __('None')}
                     </SpanText>
 
-                    <TouchableOpacity onPress={this.__downPrecision} style={styles.groupingButton}>
+                    <TouchableOpacity
+                        onPress={() => this.__changePrecision(-1)}
+                        style={styles.groupingButton}
+                    >
                         <SpanText style={styles.groupingButtonText}>-</SpanText>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={this.__upPrecision} style={styles.groupingButton}>
+
+                    <TouchableOpacity
+                        onPress={() => this.__changePrecision(+1)}
+                        style={styles.groupingButton}
+                    >
                         <SpanText style={styles.groupingButtonText}>+</SpanText>
                     </TouchableOpacity>
                 </View>
@@ -197,22 +186,19 @@ export default class OrderBookScreen extends React.Component<DepthScreenProps, S
     };
 
 
-    private __downPrecision = () => {
-        let nextPrecision = this.state.precisionIndex - 1;
-        if (nextPrecision <= 0) {
-            nextPrecision = 0;
+    private __changePrecision = (precisionDiff: number) => {
+        let nextPrecision = this.state.precisionIndex + precisionDiff;
+
+        if (nextPrecision < MIN_PRECISION) {
+            nextPrecision = MIN_PRECISION;
+        } else if (nextPrecision > MAX_PRECISION) {
+            nextPrecision = MAX_PRECISION;
         }
 
-        this.setState({ precisionIndex: nextPrecision });
-    };
-
-
-    private __upPrecision = () => {
-        let nextPrecision = this.state.precisionIndex + 1;
-        if (nextPrecision > this.state.precisionMap.length) {
-            nextPrecision = this.state.precisionMap.length;
+        if (nextPrecision === this.state.precisionIndex) {
+            return;
         }
 
-        this.setState({ precisionIndex: nextPrecision });
+        this.setState({ precisionIndex: nextPrecision }, this.__loadOrderBook);
     };
 }

@@ -1,14 +1,13 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Numeral from 'numeral';
-import { KunaMarket } from 'kuna-sdk';
 import { __ } from 'utils/i18n';
 import OrderBookProcessor from 'utils/order-book-processor';
 import SpanText from 'components/span-text';
 import { Color } from 'styles/variables';
 
 type ResistanceChartProps = {
-    market: KunaMarket;
+    market: mobx.ticker.IMarket;
     orderBook: OrderBookProcessor;
 };
 
@@ -16,8 +15,8 @@ export default class ResistanceChart extends React.PureComponent<ResistanceChart
     public render(): JSX.Element {
         const { market, orderBook } = this.props;
 
-        const sell = orderBook.calculatePriceDepth('ask', 0.1);
-        const buy = orderBook.calculatePriceDepth('bid', 0.1);
+        const buy = orderBook.calculatePriceDepth('ask', 0.1);
+        const sell = orderBook.calculatePriceDepth('bid', 0.1);
         const percent = buy[0] / (buy[0] + sell[0]) || 0;
 
         return (
@@ -32,11 +31,11 @@ export default class ResistanceChart extends React.PureComponent<ResistanceChart
 
                 <View style={styles.rangeContainer}>
                     <SpanText style={[styles.rangeValue, styles.rangeValueBuy]}>
-                        {__('Ask')}: {Numeral(buy[0]).format('0,0.[00]')} {market.baseAsset}
+                        {__('Ask')}: {Numeral(buy[0]).format('0,0.[00]')} {market.baseAsset()}
                     </SpanText>
 
                     <SpanText style={[styles.rangeValue, styles.rangeValueSell]}>
-                        {__('Bid')}: {Numeral(sell[0]).format('0,0.[00]')} {market.baseAsset}
+                        {__('Bid')}: {Numeral(sell[0]).format('0,0.[00]')} {market.baseAsset()}
                     </SpanText>
                 </View>
             </View>
@@ -62,10 +61,10 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     rangeValueBuy: {
-        color: Color.Main,
+        color: Color.Ask,
     },
     rangeValueSell: {
-        color: Color.Danger,
+        color: Color.Bid,
     },
 
     chart: {
@@ -81,9 +80,9 @@ const styles = StyleSheet.create({
         height: 5,
     },
     indicatorAsk: {
-        backgroundColor: Color.Main,
+        backgroundColor: Color.Ask,
     },
     indicatorBid: {
-        backgroundColor: Color.Danger,
+        backgroundColor: Color.Bid,
     },
 });

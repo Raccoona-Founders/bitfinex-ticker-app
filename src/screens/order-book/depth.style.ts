@@ -75,8 +75,7 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
     },
-    groupingValue: {
-    },
+    groupingValue: {},
 
     groupingButton: {
         marginLeft: 15,
@@ -116,28 +115,28 @@ export const sideRowStyles = StyleSheet.create({
         zIndex: 2,
     },
 
-    containerBid: {
+    containerBid: {},
+
+    containerAsk: {
         flexDirection: 'row-reverse',
     },
-
-    containerAsk: {},
 
     price: {
         fontSize: 14,
     },
     priceAsk: {
-        paddingLeft: 5,
-        color: Color.Danger,
+        paddingRight: 5,
+        color: Color.Ask,
     },
     priceBid: {
-        paddingRight: 5,
-        color: Color.Main,
+        paddingLeft: 5,
+        color: Color.Bid,
     },
 
     value: {
         ...DefaultStyles.mediumFont,
         fontSize: 14,
-        color: Color.BlueText,
+        color: Color.SecondaryText,
     },
 
     valueIndicator: {
@@ -150,13 +149,13 @@ export const sideRowStyles = StyleSheet.create({
     },
 
     valueIndicatorAsk: {
-        left: 0,
-        backgroundColor: Color.Danger,
+        right: 0,
+        backgroundColor: Color.Ask,
     },
 
     valueIndicatorBid: {
-        right: 0,
-        backgroundColor: Color.Main,
+        left: 0,
+        backgroundColor: Color.Bid,
     },
 });
 

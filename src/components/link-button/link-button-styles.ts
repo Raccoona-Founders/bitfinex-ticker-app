@@ -6,7 +6,7 @@ export default StyleSheet.create({
         textAlign: 'center',
         padding: 10,
         width: 100,
-        color: Color.BlueText,
+        color: Color.SecondaryText,
     },
     activeLink: {
         color: Color.Main,

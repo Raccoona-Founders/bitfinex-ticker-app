@@ -1,9 +1,9 @@
 import React from 'react';
 import { StyleProp, TextStyle, View, ViewStyle } from 'react-native';
 import numeral from 'numeral';
-import { KunaMarket } from 'kuna-sdk';
 import SpanText from 'components/span-text';
 import { sideRowStyles } from './depth.style';
+import { renderPrice } from 'utils/helper';
 
 type OrderRowProps = {
     price: number;
@@ -13,7 +13,7 @@ type OrderRowProps = {
     cumulativeValue: number;
     maxValue: number;
     avrValue: number;
-    market: KunaMarket;
+    market: mobx.ticker.IMarket;
     styles?: Record<string, StyleProp<ViewStyle | TextStyle>>;
 };
 
@@ -31,7 +31,7 @@ const getFormatByValue = (value: number): string => {
 };
 
 
-const OrderRow = (props: OrderRowProps) => {
+export default (props: OrderRowProps) => {
     const { styles = {} } = props;
 
     let valueFormat = getFormatByValue(props.value);
@@ -47,7 +47,7 @@ const OrderRow = (props: OrderRowProps) => {
         <View style={sideRowStyles.orderRow}>
             <View style={[sideRowStyles.container, styles.container]}>
                 <SpanText style={[sideRowStyles.price, styles.price]}>
-                    {numeral(props.price).format(props.market.format)}
+                    {renderPrice(props.price)}
                 </SpanText>
                 <SpanText style={valueStyles}>
                     {numeral(props.value).format(valueFormat)}
@@ -62,6 +62,3 @@ const OrderRow = (props: OrderRowProps) => {
         </View>
     );
 };
-
-
-export default OrderRow;

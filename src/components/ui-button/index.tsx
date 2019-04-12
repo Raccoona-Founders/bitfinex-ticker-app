@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     whiteText: {
-        color: Color.BlueText,
+        color: Color.SecondaryText,
     },
 
     loading: {},
