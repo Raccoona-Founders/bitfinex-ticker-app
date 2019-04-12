@@ -1,6 +1,4 @@
-import {BitfinexTicker} from 'utils/bitfinex/bitfinex';
-
-function mapTicker(ticker: BitfinexTicker): mobx.ticker.TTicker {
+function mapTicker(ticker: bitfinex.Ticker): mobx.ticker.TTicker {
     const [
         symbol,
         bid,

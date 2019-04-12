@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
     },
     prizeInteractionButton: {
         fontSize: 16,
-        color: Color.BlueText,
+        color: Color.SecondaryText,
         padding: 0,
         marginRight: 30,
     },

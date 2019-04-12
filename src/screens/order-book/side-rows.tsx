@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, StyleProp, ViewStyle } from 'react-native';
 import { map, maxBy, meanBy, max } from 'lodash';
-import { KunaMarket } from 'kuna-sdk';
 import OrderBookProcessor from 'utils/order-book-processor';
 import OrderRow from './order-row';
 import { chooseSideRowStyles } from 'screens/order-book/depth.style';
@@ -10,19 +9,21 @@ type SideRowsProps = {
     side: 'ask' | 'bid';
     orderBook: OrderBookProcessor;
     precision?: number;
-    market: KunaMarket;
+    market: mobx.ticker.IMarket;
     style?: StyleProp<ViewStyle>;
 };
 
 const SideRows = (props: SideRowsProps): JSX.Element => {
     const { orderBook, side } = props;
-    const items = (side === 'ask') ? orderBook.getAsk() : orderBook.getBid();
+    const items = (side === 'ask')
+        ? orderBook.getAsk()
+        : orderBook.getBid();
 
-    const avr = meanBy(items, ([price, value]) => +value);
-    const maxItem = maxBy(items, ([price, value]) => +value);
+    const avr = meanBy(items, ([price, count, value]) => +value);
+    const maxItem = maxBy(items, ([price, count, value]) => +value);
     const totalValue = max([orderBook.sumByAsk(), orderBook.sumByBid()]) as number;
 
-    const maxValue = maxItem ? maxItem[1] : 0;
+    const maxValue = maxItem ? maxItem[2] : 0;
     let cumulativeValue = 0;
 
     const [containerStyle, priceStyle, valueIndicatorStyle] = chooseSideRowStyles(props.side);
@@ -42,7 +43,7 @@ const SideRows = (props: SideRowsProps): JSX.Element => {
 
     return (
         <View style={props.style}>
-            {map(items, ([price, value], index: number) => {
+            {map(items, ([price, count, value], index: number) => {
                 cumulativeValue += (+value);
 
                 return (

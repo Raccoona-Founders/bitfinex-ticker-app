@@ -15,7 +15,7 @@ export const styles = StyleSheet.create({
     },
     topicTitle: {
         ...DefaultStyles.boldFont,
-        color: Color.BlueText,
+        color: Color.SecondaryText,
         fontSize: 24,
     },
 

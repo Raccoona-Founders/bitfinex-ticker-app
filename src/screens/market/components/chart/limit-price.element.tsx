@@ -20,7 +20,7 @@ export default ({ price, format, side, x, y }: Props) => {
                   x2="100%"
                   y1={positionY}
                   y2={positionY}
-                  stroke={Color.BlueText}
+                  stroke={Color.SecondaryText}
                   strokeWidth={1}
             />
 

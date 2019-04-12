@@ -5,22 +5,24 @@ export enum Color {
     Secondary = '#97c554',
 
     Text = '#000f18',
-    BlueText = '#323f66',
-    SecondaryText = '#6A6A6A',
+    SecondaryText = '#011627',
 
     GrayBlues = '#c3c6d0',
     Gray3 = '#E6EAEE',
     GrayWhite = '#f5f5f5',
     GrayNoactive = '#DCDCDC',
 
+    Ask = '#00A155',
+    Bid = '#E3170A',
+
     GrayLight = '#F2F2F2',
 
     White = '#FFFFFF',
     Black = '#000000',
 
-    Success = '#07d26e',
-    Warning = '#FFECA9',
-    Danger = '#ff5b74',
+    Success = '#00A155',
+    Warning = '#EEE0CB',
+    Danger = '#E3170A',
 }
 
 export const Fonts = {

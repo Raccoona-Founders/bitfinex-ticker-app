@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import firebase from 'react-native-firebase';
 import { isIphoneX } from 'utils/helper';
+import config from 'utils/remote-config';
 import Constants from 'utils/constants';
 
 type AdvBannerProps = {
@@ -10,8 +11,16 @@ type AdvBannerProps = {
 
 export default class AdvBanner extends React.PureComponent<AdvBannerProps> {
     public state: any = {
-        enableAdv: true,
+        enableAdv: false,
     };
+
+    public async componentDidMount(): Promise<void> {
+        const enabledAdv = await config.getValue('Bitfinex_DashboardAdv_Enable_01');
+
+        this.setState({
+            enabledAdv: Boolean(enabledAdv.val()),
+        });
+    }
 
     public render(): JSX.Element {
         if (!this.state.enableAdv) {
