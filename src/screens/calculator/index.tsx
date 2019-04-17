@@ -1,18 +1,17 @@
 import React from 'react';
 import { Keyboard, ActivityIndicator, View } from 'react-native';
-import { Router, Switch, Route } from 'react-router-native';
-import * as History from 'history';
+import { Router, Switch, Route, RouteComponentProps } from 'react-router-native';
+import { inject, observer } from 'mobx-react/native';
 import { NavigationInjectedProps } from 'react-navigation';
-import { KunaMarket, kunaMarketMap } from 'kuna-sdk';
-import kunaClient from 'utils/kuna-api';
+import * as History from 'history';
+import { wait } from 'utils/helper';
 import AnalTracker from 'utils/ga-tracker';
+import { BitfinexClient } from 'utils/bitfinex';
 import OrderBookProcessor from 'utils/order-book-processor';
 import { ShadeScrollCard } from 'components/shade-navigator';
+import Topic from 'components/topic';
 import { CalculatorMode, OperationMode } from './common';
 import OrderBookCalc from './order-book';
-import { inject, observer } from 'mobx-react/native';
-import Topic from 'components/topic';
-import { wait } from 'utils/helper';
 
 
 type State = {
@@ -45,23 +44,23 @@ export default class CalculatorScreen extends React.Component<CalculatorScreenPr
 
     public async componentDidMount(): Promise<void> {
         const marketSymbol = this._marketSymbol;
-        const currentMarket = kunaMarketMap[marketSymbol];
+        const market = this.props.Ticker.getMarket(marketSymbol);
 
         this.props.navigation.addListener('willBlur', () => {
             Keyboard.dismiss();
         });
 
         AnalTracker.logEvent('open_calculator', {
-            market: currentMarket.key,
+            market: market.symbol(),
         });
 
         await wait(300);
 
         try {
-            const orderBook = await kunaClient.getOrderBook(marketSymbol);
+            const orderBook = await BitfinexClient.book(marketSymbol, 'P0', 100);
 
             this.setState({
-                orderBook: new OrderBookProcessor(orderBook, 35),
+                orderBook: new OrderBookProcessor(orderBook, 100),
             });
         } catch (error) {
             console.warn(error);
@@ -72,8 +71,8 @@ export default class CalculatorScreen extends React.Component<CalculatorScreenPr
     public render(): JSX.Element {
         const { Ticker } = this.props;
 
-        const currentMarket = this._currentMarket;
-        const tick = Ticker.getTicker(currentMarket.key);
+        const market = this._currentMarket;
+        const tick = Ticker.getTicker(market.symbol());
 
         if (!tick) {
             return <ShadeScrollCard />;
@@ -81,9 +80,15 @@ export default class CalculatorScreen extends React.Component<CalculatorScreenPr
 
         return (
             <ShadeScrollCard>
-                <Topic title={`Calculate ${currentMarket.baseAsset}/${currentMarket.quoteAsset}`} />
+                <Topic title={`Calculate ${market.baseAsset()}/${market.quoteAsset()}`} />
                 <View style={{ paddingLeft: 20, paddingRight: 20 }}>
-                    <Router history={this._history}>{this.__renderRouterPart()}</Router>
+                    <Router history={this._history}>
+                        <Switch>
+                            <Route path="/:operation"
+                                   render={this.__renderOrderBookCalculator}
+                            />
+                        </Switch>
+                    </Router>
                 </View>
             </ShadeScrollCard>
         );
@@ -94,45 +99,33 @@ export default class CalculatorScreen extends React.Component<CalculatorScreenPr
         return this.props.navigation.getParam('marketSymbol');
     }
 
-    protected get _currentMarket(): KunaMarket {
+    protected get _currentMarket(): mobx.ticker.IMarket {
         const symbol = this._marketSymbol;
-        return kunaMarketMap[symbol];
+
+        return this.props.Ticker.getMarket(symbol);
     }
 
-
-    protected __renderRouterPart = () => {
-        return (
-            <Switch>
-                <Route path="/:operation"
-                       render={this.__renderOrderBookCalculator}
-                />
-            </Switch>
-        );
-    };
-
-    protected __renderOrderBookCalculator = () => {
+    protected __renderOrderBookCalculator = (props: RouteComponentProps<any>) => {
         const { Ticker } = this.props;
         const { orderBook } = this.state;
 
-        const currentMarket = this._currentMarket;
-        const tick = Ticker.getTicker(currentMarket.key);
+        const market = this._currentMarket;
+        const tick = Ticker.getTicker(market.symbol());
 
         if (!orderBook || !tick) {
             return <ActivityIndicator />;
         }
 
-
         const usdCalculator = Ticker.usdCalculator;
-        const usdPrice = usdCalculator.getUsdPrice(currentMarket.key);
+        const usdPrice = usdCalculator.getUsdPrice(market.symbol());
 
-
-        return (
-            // @ts-ignore
-            <OrderBookCalc ticker={tick}
-                           orderBook={orderBook}
-                           market={currentMarket}
-                           usdPrice={usdPrice.value()}
-            />
-        );
+        // @ts-ignore
+        return <OrderBookCalc
+            ticker={tick}
+            orderBook={orderBook}
+            market={market}
+            usdPrice={usdPrice.value()}
+            {...props}
+        />;
     };
 }

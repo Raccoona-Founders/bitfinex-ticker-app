@@ -1,6 +1,5 @@
 import React from 'react';
 import numeral from 'numeral';
-import { getAsset, KunaMarket, KunaV3Ticker } from 'kuna-sdk';
 import { View, StyleSheet } from 'react-native';
 import { __ } from 'utils/i18n';
 import SpanText from 'components/span-text';
@@ -11,8 +10,8 @@ import TradeValuesRow from './trade-values-row';
 
 type ProcessResultProps = {
     mode: OperationMode;
-    market: KunaMarket;
-    ticker: KunaV3Ticker;
+    market: mobx.ticker.IMarket;
+    ticker: mobx.ticker.TTicker;
     baseValue: number;
     quoteValue: number;
 };
@@ -24,30 +23,30 @@ export default class ProcessResultSection extends React.PureComponent<ProcessRes
 
         const avrPrice = numeral(quoteValue).divide(baseValue);
 
-        const diffPrice = numeral(avrPrice).subtract(ticker.lastPrice);
+        const diffPrice = numeral(avrPrice).subtract(ticker.last_price);
         return (
             <View>
                 <TradeValuesRow baseValue={baseValue}
                                 quoteValue={quoteValue}
                                 mode={mode}
-                                baseAsset={getAsset(market.baseAsset)}
-                                quoteAsset={getAsset(market.quoteAsset)}
+                                baseAsset={market.baseAsset()}
+                                quoteAsset={market.quoteAsset()}
                 />
 
                 <View style={styles.avgPrice}>
                     <SpanText style={styles.avgPriceLabel}>{__('Average Price')}</SpanText>
                     <SpanText style={styles.avgPriceValue}>
-                        {avrPrice.format(market.format)} {market.quoteAsset}
+                        {avrPrice.format('0,0.00[00]')} {market.quoteAsset()}
                     </SpanText>
                 </View>
 
                 <View style={styles.avgPriceDiff}>
                     <SpanText style={styles.avgPriceDiffText}>
-                        {diffPrice.format('+' + market.format)} {market.quoteAsset}
+                        {diffPrice.format('+0,0.00[00]')} {market.quoteAsset()}
                     </SpanText>
                     <View style={styles.avgPriceDiffSeparator} />
                     <SpanText style={styles.avgPriceDiffText}>
-                        {diffPrice.divide(ticker.lastPrice).format('+0,0.0[0]%')}
+                        {diffPrice.divide(ticker.last_price).format('+0,0.0[0]%')}
                     </SpanText>
                 </View>
             </View>

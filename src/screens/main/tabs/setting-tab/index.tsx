@@ -1,19 +1,18 @@
 import React from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, Linking } from 'react-native';
 import { inject } from 'mobx-react/native';
 import Rate, { AndroidMarket } from 'react-native-rate';
 import { withNavigation, NavigationInjectedProps } from 'react-navigation';
+import RouteKeys from 'router/route-keys';
 import AnalTracker from 'utils/ga-tracker';
 import { __ } from 'utils/i18n';
+import Constants from 'utils/constants';
 import { SpanText } from 'components/span-text';
-import RouteKeys from 'router/route-keys';
+import Icon from 'components/icon';
 import { Color } from 'styles/variables';
 import MenuLink from './components/menu-link';
-
-
 import { styles } from './setting-tab.style';
-import Icon from 'components/icon';
-import Constants from 'utils/constants';
+
 
 type SettingsProps
     = mobx.user.WithUserProps
@@ -49,10 +48,14 @@ export default class SettingTab extends React.Component<SettingsProps> {
                               onPress={this.__rateApplication}
                     />
 
+                    <MenuLink title={__('Feature request')}
+                              isLoading={rateLoading}
+                              onPress={this.__featureRequest}
+                    />
+
                     <View style={styles.separator} />
 
                     <View style={styles.settingFooter}>
-
                         <Icon name="raccoona" height={20} fill={Color.GrayBlues} />
                     </View>
                 </View>
@@ -85,6 +88,14 @@ export default class SettingTab extends React.Component<SettingsProps> {
             }
 
             this.setState({ rateLoading: false });
+        });
+    };
+
+    protected __featureRequest = () => {
+        const formUrl = 'https://forms.gle/4cUAjLFdQUk4XN7K6';
+
+        Linking.openURL(formUrl).then(() => {
+            AnalTracker.logEvent('FeatureRequest_Click');
         });
     };
 }

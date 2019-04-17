@@ -1,12 +1,11 @@
 import React from 'react';
-import numeral from 'numeral';
 import { View } from 'react-native';
-import { getAsset, KunaMarket } from 'kuna-sdk';
 import CalcAssetRow from './calc-asset-row';
 import styles from './calculator-pair.style';
+import { renderPrice } from 'utils/helper';
 
 type CalculatorPairProps = {
-    market: KunaMarket;
+    market: mobx.ticker.IMarket;
     processCalculating: (value: number, type: Side) => number;
 };
 
@@ -27,19 +26,19 @@ export default class CalculatorPair extends React.PureComponent<CalculatorPairPr
     };
 
     public render(): JSX.Element {
-        const {inputBuyValue, inputSellValue} = this.state;
-        const {market} = this.props;
+        const { inputBuyValue, inputSellValue } = this.state;
+        const { market } = this.props;
 
         return (
             <View style={styles.container}>
                 <CalcAssetRow
-                    asset={market.baseAsset}
+                    asset={market.baseAsset()}
                     value={inputBuyValue}
                     onChangeText={this.changeTextInput(Side.Base)}
                 />
 
                 <CalcAssetRow
-                    asset={market.quoteAsset}
+                    asset={market.quoteAsset()}
                     value={inputSellValue}
                     onChangeText={this.changeTextInput(Side.Quote)}
                 />
@@ -49,21 +48,14 @@ export default class CalculatorPair extends React.PureComponent<CalculatorPairPr
 
 
     public forceSetValues(baseValue: number, quoteValue: number): void {
-        const {market} = this.props;
-
-        const buyAsset = getAsset(market.baseAsset);
-        const sellAsset = getAsset(market.quoteAsset);
-
         this.setState({
-            inputBuyValue: baseValue > 0 ? numeral(baseValue).format(buyAsset.format) : '',
-            inputSellValue: quoteValue > 0 ? numeral(quoteValue).format(sellAsset.format) : '',
+            inputBuyValue: baseValue > 0 ? renderPrice(baseValue) : '',
+            inputSellValue: quoteValue > 0 ? renderPrice(quoteValue) : '',
         });
     };
 
 
     protected changeTextInput = (side: Side) => (text: string) => {
-        const {market} = this.props;
-
         if (text.length > 24) {
             text = text.substr(0, 24);
         }
@@ -85,11 +77,9 @@ export default class CalculatorPair extends React.PureComponent<CalculatorPairPr
 
         if (result && result > 0) {
             if (side === Side.Quote) {
-                const buyAsset = getAsset(market.baseAsset);
-                updateState.inputBuyValue = numeral(result).format(buyAsset.format);
+                updateState.inputBuyValue = renderPrice(result);
             } else {
-                const sellAsset = getAsset(market.quoteAsset);
-                updateState.inputSellValue = numeral(result).format(sellAsset.format);
+                updateState.inputSellValue = renderPrice(result);
             }
         }
 

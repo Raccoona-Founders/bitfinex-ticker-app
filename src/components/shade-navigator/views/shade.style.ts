@@ -12,7 +12,7 @@ export const headerStyles = StyleSheet.create({
         zIndex: 2,
     },
     headerBrow: {
-        backgroundColor: '#93A9C3',
+        backgroundColor: '#E6EAEE',
         height: 4,
         width: 50,
         borderRadius: 4,

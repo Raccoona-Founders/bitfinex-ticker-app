@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { Color, DefaultStyles } from 'styles/variables';
 
-const styles = StyleSheet.create({
+export default StyleSheet.create({
     modeButtonsBox: {
         flexDirection: 'row',
         marginBottom: 20,
@@ -23,10 +23,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     modeButtonBuyLabel: {
-        color: Color.Main
+        color: Color.Main,
     },
     modeButtonSellLabel: {
-        color: Color.Danger
+        color: Color.Danger,
     },
 
     modeButtonBuyActive: {
@@ -36,5 +36,3 @@ const styles = StyleSheet.create({
         borderColor: Color.Danger,
     },
 });
-
-export default styles;

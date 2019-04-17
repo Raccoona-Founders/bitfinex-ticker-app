@@ -5,7 +5,7 @@ import Constants from 'utils/constants';
 export const mainStyles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Color.White,
+        backgroundColor: Color.GhostWhite,
     },
     baseBackground: {
         flex: 1,
