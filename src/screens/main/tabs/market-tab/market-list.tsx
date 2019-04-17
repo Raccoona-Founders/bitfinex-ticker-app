@@ -1,9 +1,10 @@
 import React from 'react';
 import { slice } from 'lodash';
-import { withNavigation, NavigationInjectedProps } from 'react-navigation';
-import { FlatList, ListRenderItemInfo, View } from 'react-native';
-import MarketRow from 'components/market-row';
 import { compose } from 'recompose';
+import { withNavigation, NavigationInjectedProps } from 'react-navigation';
+import { FlatList, ListRenderItemInfo, StyleSheet, View } from 'react-native';
+import MarketRow from 'components/market-row';
+import { Color } from 'styles/variables';
 
 type Props = {
     tickers: mobx.ticker.TTicker[];
@@ -16,7 +17,7 @@ type Props = {
 class MarketList extends React.PureComponent<Props & NavigationInjectedProps> {
     public render(): JSX.Element {
         return (
-            <View>
+            <View style={styles.box}>
                 {slice(this.props.tickers, 0, this.props.renderCount).map(this.__marketRowRenderer())}
             </View>
         );
@@ -46,3 +47,17 @@ class MarketList extends React.PureComponent<Props & NavigationInjectedProps> {
 }
 
 export default compose<Props & NavigationInjectedProps, Props>(withNavigation)(MarketList);
+
+const styles = StyleSheet.create({
+    box: {
+        backgroundColor: Color.White,
+        borderRadius: 10,
+        marginLeft: 20,
+        marginRight: 20,
+        // overflow: 'hidden',
+        shadowColor: Color.ShadowColor,
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.08,
+        shadowRadius: 10,
+    },
+});

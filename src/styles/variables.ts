@@ -9,6 +9,7 @@ export enum Color {
 
     GrayBlues = '#c3c6d0',
     Gray3 = '#E6EAEE',
+    GhostWhite = '#F7F8FC',
     GrayWhite = '#f5f5f5',
     GrayNoactive = '#DCDCDC',
 
@@ -16,6 +17,7 @@ export enum Color {
     Bid = '#E3170A',
 
     GrayLight = '#F2F2F2',
+    ShadowColor = '#1a1725',
 
     White = '#FFFFFF',
     Black = '#000000',

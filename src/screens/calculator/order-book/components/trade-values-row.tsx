@@ -1,8 +1,7 @@
 import React from 'react';
-import numeral from 'numeral';
-import { KunaAsset } from 'kuna-sdk';
 import { View, StyleSheet } from 'react-native';
 import SpanText from 'components/span-text';
+import { renderPrice } from 'utils/helper';
 import { Color, DefaultStyles } from 'styles/variables';
 import { OperationMode } from '../../common';
 
@@ -10,35 +9,30 @@ type TradeValuesRowProps = {
     baseValue: number;
     quoteValue: number;
     mode: OperationMode;
-    baseAsset: KunaAsset;
-    quoteAsset: KunaAsset;
+    baseAsset: string;
+    quoteAsset: string;
 };
 
 type ValueCellProps = {
-    asset: KunaAsset;
+    asset: string;
     value: number;
     isMain: boolean;
 };
 
 const ValueCell = (props: ValueCellProps) => {
-    const {asset} = props;
+    const { asset } = props;
 
     return (
         <View style={styles.valueCell}>
             <SpanText style={[styles.valueAmount, props.isMain ? styles.valueAmountReceive : undefined]}>
-                {numeral(props.value).format(asset.format)} {asset.key}
+                {renderPrice(props.value)} {asset}
             </SpanText>
-            {props.isMain ? (
-                <SpanText style={styles.valueFee}>
-                    Fee: {numeral(props.value).multiply(0.0025).format(asset.format)}
-                </SpanText>
-            ) : undefined}
         </View>
     );
 };
 
 export default (props: TradeValuesRowProps) => {
-    const {mode} = props;
+    const { mode } = props;
 
     const operationBoxStyle = [
         styles.box,
@@ -59,7 +53,7 @@ export default (props: TradeValuesRowProps) => {
                        isMain={mode === OperationMode.Sell}
             />
         </View>
-    )
+    );
 };
 
 const styles = StyleSheet.create({

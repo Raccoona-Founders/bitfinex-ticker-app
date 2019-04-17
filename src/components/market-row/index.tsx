@@ -7,7 +7,6 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import { MarketNameCell } from './market-name-cell';
 import styles from './market-row.styles';
 
-
 type MarketRowProps = {
     ticker: mobx.ticker.TTicker;
     onPress?: () => void;

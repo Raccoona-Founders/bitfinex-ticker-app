@@ -3,18 +3,10 @@ import { Color } from 'styles/variables';
 
 const styles = StyleSheet.create({
     listItemLink: {
-        marginLeft: 20,
-        marginRight: 20,
         paddingRight: 15,
-        borderRadius: 10,
-
-        backgroundColor: Color.White,
-        shadowColor: "#1a1725",
-        shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.08,
-        shadowRadius: 10,
         elevation: 10,
-        marginTop: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: Color.GhostWhite,
     },
 
     favoriteLabel: {
@@ -25,7 +17,6 @@ const styles = StyleSheet.create({
         height: 36,
         zIndex: 0,
         overflow: 'hidden',
-        borderTopLeftRadius: 10,
     },
 
     favoriteIcon: {

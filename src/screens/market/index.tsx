@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { NavigationInjectedProps } from 'react-navigation';
 import AnalTracker from 'utils/ga-tracker';
 import { __ } from 'utils/i18n';
@@ -48,6 +48,8 @@ export default class MarketScreen extends React.Component<MarketScreenProps> {
 
 
     protected __openLastTrades = () => {
+        Alert.alert('Currently unavailable');
+
         // this.props.navigation.push(RouteKeys.Market_LastTrades, {
         //     marketSymbol: this._currentSymbol,
         // });
@@ -55,9 +57,9 @@ export default class MarketScreen extends React.Component<MarketScreenProps> {
 
 
     protected __openCalculator = () => {
-        // this.props.navigation.push(RouteKeys.Market_Calculator, {
-        //     marketSymbol: this._currentSymbol,
-        // });
+        this.props.navigation.push(RouteKeys.Market_Calculator, {
+            marketSymbol: this._currentSymbol,
+        });
     };
 
 
