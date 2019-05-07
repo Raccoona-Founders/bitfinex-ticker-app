@@ -117,9 +117,9 @@ const styles = StyleSheet.create({
         paddingBottom: 15,
         backgroundColor: Color.White,
         shadowColor: "#1a1725",
-        shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.08,
-        shadowRadius: 10,
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.05,
+        shadowRadius: 2,
         elevation: 10,
     },
     boxHead: {

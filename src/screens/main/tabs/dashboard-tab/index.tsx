@@ -52,10 +52,10 @@ export default class MarketTab extends React.Component<Props, State> {
                         tickers={Ticker.getFavorite()}
                         usdCalculator={Ticker.usdCalculator}
                     />
-                </ScrollView>
 
-                <AdvBanner showBanner={true} />
-                <View style={{ height: Constants.IS_IPHONE_X ? 90 : 60 }} />
+                    <AdvBanner showBanner={true} />
+                    <View style={{ height: Constants.IS_IPHONE_X ? 90 : 60 }} />
+                </ScrollView>
             </View>
         );
     }

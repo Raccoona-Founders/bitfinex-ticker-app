@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, Dimensions, StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { Animated, Dimensions, StyleProp, TouchableOpacity, View } from 'react-native';
 import { KunaAssetUnit } from 'kuna-sdk';
 import * as SlideView from 'components/slide-view';
 import { tabBarStyles } from '../styles';
@@ -35,7 +35,7 @@ export const tabNavigationRoutes: TabnavRoute[] = [
         title: __('Markets'),
         index: 1,
         sceneComponent: Tabs.MarketTab,
-    },{
+    }, {
         key: 'Setting',
         title: __('Setting'),
         index: 2,
@@ -94,23 +94,17 @@ class QuoteTabItem extends React.PureComponent<TabItemProps> {
         super(props);
 
         const { position, index } = this.props;
-
         const inputRange = [index - 1, index, index + 1];
 
         this.boxAnimatedStyle = {
-            transform: [{
-                translateX: position.interpolate({
-                    inputRange: inputRange,
-                    outputRange: [width - 120, 0, -185],
-                }),
-            }],
             opacity: position.interpolate({
                 inputRange: inputRange,
-                outputRange: [0.5, 1, 0.2],
+                outputRange: [0.35, 1, 0.35],
+                extrapolate: 'clamp',
             }),
         };
     }
-
+    
     public render(): JSX.Element {
         const { route } = this.props;
 
